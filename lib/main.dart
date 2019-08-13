@@ -1,7 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:leonidas/icons/bottom_nav_icons.dart';
+import 'dart:async';
 
-void main() => runApp(MyApp());
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:leonidas/icons/bottom_nav_icons.dart';
+import 'package:leonidas/utils/sentry.dart';
+
+// ignore: prefer_void_to_null
+Future<Null> main() async {
+  await DotEnv().load('.env');
+  // Setup sentry
+  final Sentry sentry = Sentry();
+
+  // Report to sentry when error is detected
+  // ignore: prefer_void_to_null
+  runZoned<Future<Null>>(() async {
+    runApp(MyApp());
+  }, onError: (dynamic error, dynamic stackTrace) async {
+    await sentry.reportError(error, stackTrace);
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -74,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.play_arrow),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
