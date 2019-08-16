@@ -12,4 +12,5 @@ class AppStore extends ChangeNotifier {
   int currentDay = 0;
   int currentCycle = 0;
   int currentExecercise = 0;
+  int selectedRoutineIdx = 0;
 }

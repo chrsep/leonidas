@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:leonidas/leonidas_theme.dart';
 import 'package:leonidas/models/app_store.dart';
 import 'package:leonidas/models/countdown_timer.dart';
 import 'package:leonidas/utils/sample_routine.dart';
@@ -46,7 +47,8 @@ class Leonidas extends StatelessWidget {
         title: 'Leonidas',
         theme: ThemeData(
           brightness: Brightness.dark,
-          accentColor: Colors.redAccent,
+          primaryColor: LeonidasTheme.primaryColor,
+          accentColor: LeonidasTheme.accentColor,
         ),
         home: HomePage(),
       ),

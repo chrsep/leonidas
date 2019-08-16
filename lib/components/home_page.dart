@@ -1,6 +1,7 @@
 // This is the first widget our application renders
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:leonidas/components/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
 
 class HomePage extends StatefulWidget {
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     if (_currPageIndex == 0) {
       _playPauseController.forward();
-    }else{
+    } else {
       _playPauseController.reverse();
     }
     return Scaffold(
@@ -64,9 +65,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           progress: _playPauseController,
         ),
         onPressed: () {
-          setState(() {
-            _currPageIndex = 0;
-          });
+          final snackbar = SnackBar(
+            content: Text('Start your workout'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            ),
+          );
+          Scaffold.of(context).showSnackBar(snackbar);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -90,7 +98,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
       body: SafeArea(
-        top: false,
+        top: true,
         child: Stack(
           fit: StackFit.expand,
           children: sections.map((Section section) {
@@ -130,7 +138,7 @@ class Section {
 }
 
 List<Section> sections = [
-  Section(0, 'Tracker', BottomNav.diary, Text('test')),
+  Section(0, 'Tracker', BottomNav.diary, TrackerPage()),
   Section(1, 'Workouts', BottomNav.dumbbell, Text('tests')),
   Section(2, 'History', null, Text('testdsa')),
   Section(3, 'History', BottomNav.history, Text('testdsa')),
