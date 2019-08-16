@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:leonidas/models/app_store.dart';
+import 'package:leonidas/models/countdown_timer.dart';
 import 'package:leonidas/utils/sample_routine.dart';
 import 'package:leonidas/utils/sentry.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,9 @@ class Leonidas extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           builder: (_) => AppStore([sampleData]),
+        ),
+        ChangeNotifierProvider(
+          builder: (_) => CountdownTimer(),
         )
       ],
       child: MaterialApp(
