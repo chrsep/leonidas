@@ -70,12 +70,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      backgroundColor: Color(0xFF121212),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         clipBehavior: Clip.hardEdge,
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white10,
           showUnselectedLabels: false,
           showSelectedLabels: false,
           currentIndex: _currPageIndex,
