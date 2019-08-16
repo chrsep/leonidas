@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,6 +25,9 @@ dependencies:
   cupertino_icons: ^0.1.2
   sentry: ^2.2.0
   flutter_dotenv: ^2.0.1
+  sqflite: ^1.1.6
+  path: ^1.6.2
+  provider: ^3.0.0
 
 dev_dependencies:
   flutter_test:
