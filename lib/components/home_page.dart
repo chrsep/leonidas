@@ -134,5 +134,5 @@ List<Section> sections = [
   Section(1, 'Workouts', BottomNav.dumbbell, Text('tests')),
   Section(2, 'History', null, Text('testdsa')),
   Section(3, 'History', BottomNav.history, Text('testdsa')),
-  Section(4, 'History', BottomNav.history, Text('testdsa')),
+  Section(4, 'History', Icons.menu, Text('testdsa')),
 ];
