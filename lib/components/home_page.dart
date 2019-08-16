@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       _playPauseController.reverse();
     }
     return Scaffold(
+      extendBody: true,
       floatingActionButton: FloatingActionButton(
         child: AnimatedIcon(
           icon: AnimatedIcons.play_pause,
@@ -99,6 +100,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       body: SafeArea(
         top: true,
+        bottom: false,
         child: Stack(
           fit: StackFit.expand,
           children: sections.map((Section section) {

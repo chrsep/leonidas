@@ -6,10 +6,10 @@ import 'package:leonidas/models/progression.dart';
 import 'package:leonidas/models/routine.dart';
 
 Routine generateSampleRoutine() {
-  const name = 'Wendler 5/3/1';
+  const name = 'Jim Wendler 5/3/1';
 
   final squat = Exercise('Squat', '', {1: 55000});
-  final bench = Exercise('Bench', '', {1: 35000});
+  final bench = Exercise('Bench', '', {1: 55000});
   final deadlift = Exercise('Deadlift', '', {1: 80000});
   final press = Exercise('press', '', {1: 35000});
 
@@ -28,19 +28,22 @@ Routine generateSampleRoutine() {
 
   final cycles = [
     Cycle('5/5/5', [
-      ExerciseSet(5, 65, 0),
-      ExerciseSet(5, 75, 1),
-      ExerciseSet(5, 85, 2),
+      ExerciseSet(1, 5, 65, 0, false),
+      ExerciseSet(1, 5, 75, 1, false),
+      ExerciseSet(1, 5, 85, 2, true),
+      ExerciseSet(5, 5, 65, 0, false),
     ]),
     Cycle('3/3/3', [
-      ExerciseSet(5, 65, 0),
-      ExerciseSet(5, 75, 1),
-      ExerciseSet(5, 85, 2),
+      ExerciseSet(1, 3, 65, 0, false),
+      ExerciseSet(1, 3, 75, 1, false),
+      ExerciseSet(1, 3, 85, 2, true),
+      ExerciseSet(5, 5, 65, 0, false),
     ]),
     Cycle('5/3/1', [
-      ExerciseSet(5, 65, 0),
-      ExerciseSet(5, 75, 1),
-      ExerciseSet(5, 85, 2),
+      ExerciseSet(1, 5, 75, 0, false),
+      ExerciseSet(1, 3, 85, 1, false),
+      ExerciseSet(1, 1, 95, 2, true),
+      ExerciseSet(5, 5, 75, 0, false),
     ])
   ];
 
