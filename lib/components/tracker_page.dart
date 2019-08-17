@@ -6,14 +6,28 @@ import 'package:leonidas/leonidas_theme.dart';
 import 'package:leonidas/models/app_store.dart';
 import 'package:provider/provider.dart';
 
-class TrackerPage extends StatelessWidget {
+class TrackerPage extends StatefulWidget {
+  @override
+  _TrackerPageState createState() => _TrackerPageState();
+}
+
+class _TrackerPageState extends State<TrackerPage> {
+  bool isShowingNext;
+
+  @override
+  void initState() {
+    isShowingNext = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<AppStore>(context);
     final selectedRoutine = store.routines[store.selectedRoutineIdx];
-    final selectedDay = selectedRoutine.days[store.currentDay];
-    final selectedCycle =
-        selectedRoutine.progression.cycles[store.currentCycle];
+    final selectedDay = selectedRoutine
+        .days[isShowingNext ? store.nextDayIdx : store.currentDay];
+    final selectedCycle = selectedRoutine.progression
+        .cycles[isShowingNext ? store.nextCycleIdx : store.currentCycle];
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -42,7 +56,7 @@ class TrackerPage extends StatelessWidget {
                   ],
                 )),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 16, bottom: 8),
+              padding: const EdgeInsets.only(left: 8.0, top: 16, bottom: 0),
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -57,13 +71,58 @@ class TrackerPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: Row(
                       children: <Widget>[
                         Flexible(
                           child: Text(selectedRoutine.name,
                               overflow: TextOverflow.clip,
                               style: LeonidasTheme.h2),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'WORKOUT',
+                        style: LeonidasTheme.overline,
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () => setState(() => {isShowingNext = false}),
+                          child: AnimatedDefaultTextStyle(
+                            duration: Duration(milliseconds: 200),
+                            child: Text(
+                              'Current',
+                            ),
+                            style: LeonidasTheme.h4.apply(
+                              color: isShowingNext
+                                  ? Colors.white30
+                                  : LeonidasTheme.accentColor,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: GestureDetector(
+                            onTap: () => setState(() => {isShowingNext = true}),
+                            child: AnimatedDefaultTextStyle(
+                              curve: Curves.ease,
+                              child: Text('Next'),
+                              duration: Duration(milliseconds: 200),
+                              style: LeonidasTheme.h4.apply(
+                                color: isShowingNext
+                                    ? LeonidasTheme.accentColor
+                                    : Colors.white30,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -93,7 +152,7 @@ class TrackerPage extends StatelessWidget {
                     children: selectedRoutine.days.map((value) {
                       final isSelected = value.name == selectedDay.name;
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 18, right: 8.0),
+                        padding: const EdgeInsets.only(bottom: 8, right: 8.0),
                         child: Chip(
                           label: Text(value.name),
                           backgroundColor: isSelected
@@ -112,36 +171,6 @@ class TrackerPage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, bottom: 4),
-                  child: Text(
-                    'WORKOUT',
-                    style: LeonidasTheme.overline,
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    'Current',
-                    style: LeonidasTheme.h4
-                        .apply(color: LeonidasTheme.accentColor),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    'Next',
-                    style: LeonidasTheme.h4.apply(color: Colors.white30),
-                  ),
-                ),
-              ],
             ),
             ...selectedDay.exercises.map((exercise) {
               return ExerciseSetsTable(

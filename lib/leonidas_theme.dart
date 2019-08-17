@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class LeonidasTheme {
   static const List<Color> whiteTint = [
     Color(0xFF121212),
-    Color(0x0CFFFFFF),
-    Color(0x11FFFFFF),
-    Color(0x14FFFFFF),
-    Color(0x16FFFFFF),
-    Color(0x1CFFFFFF),
-    Color(0x1EFFFFFF),
-    Color(0x23FFFFFF),
-    Color(0x26FFFFFF),
-    Color(0x28FFFFFF),
+    Color(0xFF1D1D1D),
+    Color(0xFF222222),
+    Color(0xFF242424),
+    Color(0xFF272727),
+    Color(0xFF2C2C2C),
+    Color(0xFF2D2D2D),
+    Color(0xFF323232),
+    Color(0xFF353535),
+    Color(0xFF373737),
   ];
 
   static const Color primaryColor = Colors.blue;

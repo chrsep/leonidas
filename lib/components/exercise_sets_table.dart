@@ -17,7 +17,7 @@ class ExerciseSetsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4, top: 8.0),
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8.0),
       child: Column(children: [
         Row(
           children: <Widget>[
@@ -34,7 +34,7 @@ class ExerciseSetsTable extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Card(
-                color: LeonidasTheme.whiteTint[2],
+                color: LeonidasTheme.whiteTint[1],
                 child: DataTable(
                   columnSpacing: 24,
                   columns: const <DataColumn>[
