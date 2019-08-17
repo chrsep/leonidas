@@ -6,7 +6,7 @@ import 'package:leonidas/models/progression.dart';
 import 'package:leonidas/models/routine.dart';
 
 Routine generateSampleRoutine() {
-  const name = 'Jim Wendler 5/3/1';
+  const name = 'Wendler 5/3/1';
 
   final squat = Exercise('Squat', '', {1: 55000});
   final bench = Exercise('Bench', '', {1: 55000});

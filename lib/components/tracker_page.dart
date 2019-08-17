@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:leonidas/components/exercise_sets_table.dart';
 import 'package:leonidas/leonidas_theme.dart';
 import 'package:leonidas/models/app_store.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,7 @@ class TrackerPage extends StatelessWidget {
                         Flexible(
                           child: Text(selectedRoutine.name,
                               overflow: TextOverflow.clip,
-                              style: LeonidasTheme.h3),
+                              style: LeonidasTheme.h2),
                         ),
                       ],
                     ),
@@ -92,7 +93,7 @@ class TrackerPage extends StatelessWidget {
                     children: selectedRoutine.days.map((value) {
                       final isSelected = value.name == selectedDay.name;
                       return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsets.only(bottom: 18, right: 8.0),
                         child: Chip(
                           label: Text(value.name),
                           backgroundColor: isSelected
@@ -112,56 +113,43 @@ class TrackerPage extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Card(
-                      child: DataTable(
-                        columnSpacing: 24,
-                        columns: const <DataColumn>[
-                          DataColumn(label: Text('Excercise')),
-                          DataColumn(label: Text('Set')),
-                          DataColumn(label: Text('Reps')),
-                          DataColumn(label: Text('Weight')),
-                        ],
-                        rows: selectedDay.exercises
-                            .map((exercise) {
-                              final List<DataRow> rows = [];
-                              final int tm = (exercise.maxRep[1] *
-                                      selectedRoutine.trainingMax /
-                                      100)
-                                  .floor();
-                              for (var set in selectedCycle.sets) {
-                                final weight =
-                                    set.oneMaxRepPercentage * tm / 100000;
-                                final closestTwoAndAHalf =
-                                    (weight / 2.5).floor() * 2.5;
-                                final roundedWeight =
-                                    weight - closestTwoAndAHalf > 1.25
-                                        ? closestTwoAndAHalf + 2.5
-                                        : closestTwoAndAHalf;
-                                rows.add(DataRow(
-                                  cells: [
-                                    DataCell(Text(exercise.name)),
-                                    DataCell(Text(set.sets.toString())),
-                                    DataCell(Text(set.reps.toString())),
-                                    DataCell(Text(roundedWeight.toString() + 'kg')),
-                                  ],
-                                ));
-                              }
-                              return rows;
-                            })
-                            .expand((i) => i)
-                            .toList(),
-                      ),
-                      color: LeonidasTheme.whiteTint[1],
-                    ),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 4),
+                  child: Text(
+                    'WORKOUT',
+                    style: LeonidasTheme.overline,
                   ),
-                ],
-              ),
-            )
+                )
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    'Current',
+                    style: LeonidasTheme.h4
+                        .apply(color: LeonidasTheme.accentColor),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    'Next',
+                    style: LeonidasTheme.h4.apply(color: Colors.white30),
+                  ),
+                ),
+              ],
+            ),
+            ...selectedDay.exercises.map((exercise) {
+              return ExerciseSetsTable(
+                cycle: selectedCycle,
+                exercise: exercise,
+                routine: selectedRoutine,
+              );
+            }),
           ],
         ),
       ),
