@@ -8,10 +8,10 @@ import 'package:leonidas/models/routine.dart';
 Routine generateSampleRoutine() {
   const name = 'Wendler 5/3/1';
 
-  final squat = Exercise('Squat', '', {1: 55000});
-  final bench = Exercise('Bench', '', {1: 55000});
-  final deadlift = Exercise('Deadlift', '', {1: 80000});
-  final press = Exercise('press', '', {1: 35000});
+  final squat = Exercise('Squat', '', {1: 55});
+  final bench = Exercise('Bench', '', {1: 55});
+  final deadlift = Exercise('Deadlift', '', {1: 80});
+  final press = Exercise('press', '', {1: 35});
 
   final days = [
     Days('Day 1', 0, [squat, bench]),
@@ -20,10 +20,10 @@ Routine generateSampleRoutine() {
   ];
 
   final exerciseProgression = {
-    squat: 5000,
-    bench: 2500,
-    deadlift: 5000,
-    press: 2500
+    squat: 5.0,
+    bench: 2.5,
+    deadlift: 5.0,
+    press: 2.5
   };
 
   final cycles = [

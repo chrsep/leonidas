@@ -15,4 +15,6 @@ class Routine extends ChangeNotifier {
   final int restPeriod;
   final UnitOfMeasurement unitOfMeasurement;
   final Progression progression;
+
+  double calculateTMWeight(double oneRepMax) => oneRepMax * trainingMax / 100;
 }

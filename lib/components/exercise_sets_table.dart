@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:leonidas/models/cycle.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:leonidas/utils/weights.dart';
 
 import '../leonidas_theme.dart';
 
@@ -17,18 +18,24 @@ class ExerciseSetsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8.0),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
       child: Column(children: [
-        Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                exercise.name,
-                style: LeonidasTheme.h6,
+        Padding(
+          padding: const EdgeInsets.only(left:8.0, right: 8, bottom: 4),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  exercise.name,
+                  style: LeonidasTheme.h6.apply(color: Colors.white70),
+                ),
               ),
-            )
-          ],
+              Text(
+                '1RM: ' + exercise.oneRepMax.toString() + 'KG',
+                style: LeonidasTheme.subtitle1.apply(color: Colors.white70),
+              ),
+            ],
+          ),
         ),
         Row(
           children: <Widget>[
@@ -44,18 +51,14 @@ class ExerciseSetsTable extends StatelessWidget {
                     DataColumn(label: Text('Weight')),
                   ],
                   rows: cycle.sets.map((set) {
-                    final int tm =
-                        (exercise.maxRep[1] * routine.trainingMax / 100)
-                            .floor();
-                    final weight = set.oneMaxRepPercentage * tm / 100000;
-                    final closestTwoAndAHalf = (weight / 2.5).floor() * 2.5;
-                    final roundedWeight = weight - closestTwoAndAHalf > 1.25
-                        ? closestTwoAndAHalf + 2.5
-                        : closestTwoAndAHalf;
+                    // TM is training max
+                    final tmWeight = routine.calculateTMWeight(exercise.oneRepMax);
+                    final weight = set.tmPercentage * tmWeight / 100;
+                    final roundedWeight = roundWeight(weight);
                     return DataRow(
                       cells: [
                         DataCell(
-                            Text(set.oneMaxRepPercentage.toString() + '%')),
+                            Text(set.tmPercentage.toString() + '%')),
                         DataCell(Text(set.sets.toString())),
                         DataCell(Text(set.reps.toString())),
                         DataCell(Text(roundedWeight.toString() + 'kg')),
