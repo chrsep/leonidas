@@ -54,16 +54,13 @@ class ExerciseSetsTable extends StatelessWidget {
                   ],
                   rows: cycle.sets.map((set) {
                     // TM is training max
-                    final tmWeight =
-                        routine.calculateTMWeight(exercise.oneRepMax);
-                    final weight = set.tmPercentage * tmWeight / 100;
-                    final roundedWeight = roundWeight(weight);
+                    final calculatedWeight = calculateWeight(exercise, routine, set);
                     return DataRow(
                       cells: [
                         DataCell(Text(set.tmPercentage.toString() + '%')),
                         DataCell(Text(set.sets.toString())),
                         DataCell(Text(set.reps.toString())),
-                        DataCell(Text(roundedWeight.toString() + 'kg')),
+                        DataCell(Text(calculatedWeight.toString() + 'kg')),
                         DataCell(Text(set.rest.toString() + 's')),
                       ],
                     );

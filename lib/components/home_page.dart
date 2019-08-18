@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:leonidas/components/diary_section.dart';
-import 'package:leonidas/components/tracker_page.dart';
+import 'package:leonidas/components/trackerPage/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
 
 class HomePage extends StatefulWidget {

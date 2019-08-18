@@ -28,6 +28,7 @@ dependencies:
   sqflite: ^1.1.6
   path: ^1.6.2
   provider: ^3.0.0
+  tuple: ^1.0.2
 
 dev_dependencies:
   flutter_launcher_icons: "^0.7.2"

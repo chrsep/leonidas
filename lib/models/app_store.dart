@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:leonidas/models/history.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:tuple/tuple.dart';
+
+import 'exercise.dart';
+import 'exercise_set.dart';
 
 class AppStore extends ChangeNotifier {
   AppStore(this.routines);
@@ -28,5 +32,22 @@ class AppStore extends ChangeNotifier {
       modifier = 0 - currentCycle;
     }
     return currentCycle + modifier;
+  }
+
+  List<Tuple2<Exercise, ExerciseSet>> get currentSessionExercises {
+    final routine = routines[selectedRoutineIdx];
+    final exercises = routine.sessions[currentSession].exercises;
+    final sets = routine.progression.cycles[currentCycle].sets;
+    final List<Tuple2<Exercise, ExerciseSet>> map = [];
+    int processedIdx = 0;
+    for (var exercise in exercises) {
+      for (var set in sets) {
+        if(processedIdx >= currentExercise){
+          map.add(Tuple2(exercise, set));
+        }
+        processedIdx++;
+      }
+    }
+    return map;
   }
 }
