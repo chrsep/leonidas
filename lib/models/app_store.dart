@@ -9,21 +9,21 @@ class AppStore extends ChangeNotifier {
   final List<Routine> routines;
 
   // Progress of our current workout.
-  int currentDay = 0;
+  int currentSession = 0;
   int currentCycle = 0;
   int currentExercise = 0;
   int selectedRoutineIdx = 0;
 
   int get nextDayIdx {
     int modifier = 1;
-    if (currentDay + modifier >= routines[selectedRoutineIdx].days.length) {
-      modifier = 0 - currentDay;
+    if (currentSession + modifier >= routines[selectedRoutineIdx].sessions.length) {
+      modifier = 0 - currentSession;
     }
-    return currentDay + modifier;
+    return currentSession + modifier;
   }
 
   int get nextCycleIdx {
-    int modifier = nextDayIdx == currentDay + 1 ? 0 : 1;
+    int modifier = nextDayIdx == currentSession + 1 ? 0 : 1;
     if (currentCycle + modifier >= routines[selectedRoutineIdx].progression.cycles.length) {
       modifier = 0 - currentCycle;
     }

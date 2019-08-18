@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 
 import 'cycle.dart';
-import 'days.dart';
+import 'session.dart';
 import 'exercise_record.dart';
 
 class History extends ChangeNotifier {
   DateTime dateTime;
-  Days day;
+  Session day;
   Cycle cycle;
   int resPeriod;
   List<ExerciseRecord> records;

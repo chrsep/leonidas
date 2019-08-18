@@ -18,10 +18,10 @@ class ExerciseSetsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16, top: 8),
       child: Column(children: [
         Padding(
-          padding: const EdgeInsets.only(left:8.0, right: 8, bottom: 4),
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -31,8 +31,9 @@ class ExerciseSetsTable extends StatelessWidget {
                 ),
               ),
               Text(
-                '1RM: ' + exercise.oneRepMax.toString() + 'KG',
-                style: LeonidasTheme.subtitle1.apply(color: Colors.white70),
+                exercise.oneRepMax.toString() + ' Kg Base',
+                style:
+                    LeonidasTheme.subtitle1Light.apply(color: Colors.white70),
               ),
             ],
           ),
@@ -45,23 +46,25 @@ class ExerciseSetsTable extends StatelessWidget {
                 child: DataTable(
                   columnSpacing: 24,
                   columns: const <DataColumn>[
-                    DataColumn(label: Text('Load (xTM)')),
+                    DataColumn(label: Text('load')),
                     DataColumn(label: Text('Set')),
                     DataColumn(label: Text('Reps')),
                     DataColumn(label: Text('Weight')),
+                    DataColumn(label: Text('Rest')),
                   ],
                   rows: cycle.sets.map((set) {
                     // TM is training max
-                    final tmWeight = routine.calculateTMWeight(exercise.oneRepMax);
+                    final tmWeight =
+                        routine.calculateTMWeight(exercise.oneRepMax);
                     final weight = set.tmPercentage * tmWeight / 100;
                     final roundedWeight = roundWeight(weight);
                     return DataRow(
                       cells: [
-                        DataCell(
-                            Text(set.tmPercentage.toString() + '%')),
+                        DataCell(Text(set.tmPercentage.toString() + '%')),
                         DataCell(Text(set.sets.toString())),
                         DataCell(Text(set.reps.toString())),
                         DataCell(Text(roundedWeight.toString() + 'kg')),
+                        DataCell(Text(set.rest.toString() + 's')),
                       ],
                     );
                   }).toList(),

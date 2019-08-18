@@ -25,7 +25,7 @@ class _DiarySectionState extends State<DiarySection> {
     final store = Provider.of<AppStore>(context);
     final selectedRoutine = store.routines[store.selectedRoutineIdx];
     final selectedDay = selectedRoutine
-        .days[isShowingNext ? store.nextDayIdx : store.currentDay];
+        .sessions[isShowingNext ? store.nextDayIdx : store.currentSession];
     final selectedCycle = selectedRoutine.progression
         .cycles[isShowingNext ? store.nextCycleIdx : store.currentCycle];
     return SingleChildScrollView(
@@ -85,7 +85,7 @@ class _DiarySectionState extends State<DiarySection> {
                   Row(
                     children: <Widget>[
                       Text(
-                        'WORKOUT',
+                        'WORKOUT SESSIONS',
                         style: LeonidasTheme.overline,
                       )
                     ],
@@ -149,7 +149,7 @@ class _DiarySectionState extends State<DiarySection> {
                     }).toList(),
                   ),
                   Row(
-                    children: selectedRoutine.days.map((value) {
+                    children: selectedRoutine.sessions.map((value) {
                       final isSelected = value.name == selectedDay.name;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8, right: 8.0),
