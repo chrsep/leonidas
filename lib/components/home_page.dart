@@ -1,6 +1,7 @@
 // This is the first widget our application renders
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:leonidas/components/diary_section.dart';
 import 'package:leonidas/components/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
 
@@ -26,14 +27,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   int _currPageIndex = 0;
   List<FadeTransition> _sectionWidgets;
   List<AnimationController> _faders;
-  AnimationController _playPauseController;
+  double height;
 
   @override
   void initState() {
     super.initState();
 
-    _playPauseController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    height = 100;
     _faders = sections
         .map<AnimationController>((Section section) => AnimationController(
             vsync: this, duration: Duration(milliseconds: 200)))
@@ -53,29 +53,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (_currPageIndex == 0) {
-      _playPauseController.forward();
-    } else {
-      _playPauseController.reverse();
-    }
     return Scaffold(
       extendBody: true,
       floatingActionButton: FloatingActionButton(
-        child: AnimatedIcon(
-          icon: AnimatedIcons.play_pause,
-          progress: _playPauseController,
-        ),
+        child: Icon(Icons.play_arrow),
         onPressed: () {
-          final snackbar = SnackBar(
-            content: Text('Start your workout'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {
-                // Some code to undo the change.
-              },
-            ),
-          );
-          Scaffold.of(context).showSnackBar(snackbar);
+          Navigator.of(context).push<TrackerPage>(TrackerPage.createRoute());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -121,7 +104,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _playPauseController.dispose();
     for (AnimationController controller in _faders) {
       controller.dispose();
     }
@@ -140,7 +122,7 @@ class Section {
 }
 
 List<Section> sections = [
-  Section(0, 'Tracker', BottomNav.diary, TrackerPage()),
+  Section(0, 'Tracker', BottomNav.diary, DiarySection()),
   Section(1, 'Workouts', BottomNav.dumbbell, Text('tests')),
   Section(2, 'History', null, Text('testdsa')),
   Section(3, 'History', BottomNav.history, Text('testdsa')),
