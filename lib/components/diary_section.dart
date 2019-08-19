@@ -109,7 +109,7 @@ class _DiarySectionState extends State<DiarySection> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
+                          padding: const EdgeInsets.only(left: 16.0),
                           child: GestureDetector(
                             onTap: () => setState(() => {isShowingNext = true}),
                             child: AnimatedDefaultTextStyle(

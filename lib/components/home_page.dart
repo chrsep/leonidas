@@ -4,6 +4,8 @@ import 'package:flutter/painting.dart';
 import 'package:leonidas/components/diary_section.dart';
 import 'package:leonidas/components/trackerPage/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
+import 'package:leonidas/models/countdown_timer.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -55,10 +57,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.play_arrow),
-        onPressed: () {
-          Navigator.of(context).push<TrackerPage>(TrackerPage.createRoute());
+      floatingActionButton: Consumer<CountdownTimer>(
+        builder: (context, value, child) {
+          return FloatingActionButton(
+            child: Icon(Icons.play_arrow),
+            onPressed: () {
+              value.countdownFrom(10);
+              Navigator.of(context)
+                  .push<TrackerPage>(TrackerPage.createRoute());
+            },
+          );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

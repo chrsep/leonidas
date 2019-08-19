@@ -29,6 +29,8 @@ class LeonidasTheme {
       TextStyle(fontSize: 48, fontWeight: FontWeight.w500, letterSpacing: 0);
   static const TextStyle h4 =
       TextStyle(fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25);
+  static const TextStyle h4Heavy =
+  TextStyle(fontSize: 34, fontWeight: FontWeight.w500, letterSpacing: 0.25);
   static const TextStyle h5 =
       TextStyle(fontSize: 24, fontWeight: FontWeight.w400, letterSpacing: 0);
   static const TextStyle h6 =

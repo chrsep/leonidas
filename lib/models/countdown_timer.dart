@@ -2,9 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 
+enum CountingDirection { up, down }
+
 class CountdownTimer extends ChangeNotifier {
   int _timeLeft = 0;
   bool isCounting = false;
+  Timer timer;
+  CountingDirection countingDirection = CountingDirection.down;
+  Function countdownCallback;
 
   set timeLeft(int value) {
     _timeLeft = value;
@@ -20,15 +25,61 @@ class CountdownTimer extends ChangeNotifier {
     return secondIntFormat(timeLeft);
   }
 
-  void countdownFrom(int lengthInSecond) {
+  void countdownFrom(int lengthInSecond, {Function callback}) {
     isCounting = true;
     timeLeft = lengthInSecond;
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    countingDirection = CountingDirection.down;
+    if (callback != null) {
+      countdownCallback = callback;
+    }
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      timeLeft--;
       if (timeLeft == 0) {
-        timer.cancel();
+        if (countdownCallback != null) {
+          countdownCallback();
+        }
         isCounting = false;
+        timer.cancel();
       }
     });
+  }
+
+  void countUp() {
+    isCounting = true;
+    timeLeft = 0;
+    countingDirection = CountingDirection.up;
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      timeLeft++;
+    });
+  }
+
+  int stop() {
+    final timeOnCancelled = timeLeft;
+    timer.cancel();
+    timeLeft = 0;
+    isCounting = false;
+    return timeOnCancelled;
+  }
+
+  void pause() {
+    timer.cancel();
+    isCounting = false;
+  }
+
+  void continueCounting() {
+    if (countingDirection == CountingDirection.up) {
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        timeLeft--;
+        if (timeLeft == 0) {
+          timer.cancel();
+          isCounting = false;
+        }
+      });
+    } else {
+      Timer.periodic(Duration(seconds: 1), (timer) {
+        timeLeft++;
+      });
+    }
   }
 }
 

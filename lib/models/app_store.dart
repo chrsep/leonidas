@@ -15,12 +15,22 @@ class AppStore extends ChangeNotifier {
   // Progress of our current workout.
   int currentSession = 0;
   int currentCycle = 0;
-  int currentExercise = 0;
+  int _currentActivity = 0;
   int selectedRoutineIdx = 0;
+
+  set currentActivity(int value) {
+    _currentActivity = value;
+    notifyListeners();
+  }
+
+  int get currentActivity {
+    return _currentActivity;
+  }
 
   int get nextDayIdx {
     int modifier = 1;
-    if (currentSession + modifier >= routines[selectedRoutineIdx].sessions.length) {
+    if (currentSession + modifier >=
+        routines[selectedRoutineIdx].sessions.length) {
       modifier = 0 - currentSession;
     }
     return currentSession + modifier;
@@ -28,7 +38,8 @@ class AppStore extends ChangeNotifier {
 
   int get nextCycleIdx {
     int modifier = nextDayIdx == currentSession + 1 ? 0 : 1;
-    if (currentCycle + modifier >= routines[selectedRoutineIdx].progression.cycles.length) {
+    if (currentCycle + modifier >=
+        routines[selectedRoutineIdx].progression.cycles.length) {
       modifier = 0 - currentCycle;
     }
     return currentCycle + modifier;
@@ -42,9 +53,7 @@ class AppStore extends ChangeNotifier {
     int processedIdx = 0;
     for (var exercise in exercises) {
       for (var set in sets) {
-        if(processedIdx >= currentExercise){
-          map.add(Tuple2(exercise, set));
-        }
+        map.add(Tuple2(exercise, set));
         processedIdx++;
       }
     }
