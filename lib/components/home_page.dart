@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:leonidas/components/diary_section.dart';
+import 'package:leonidas/components/coming_soon_placeholder.dart';
 import 'package:leonidas/components/trackerPage/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
 import 'package:leonidas/models/countdown_timer.dart';
@@ -131,8 +132,8 @@ class Section {
 
 List<Section> sections = [
   Section(0, 'Tracker', BottomNav.diary, DiarySection()),
-  Section(1, 'Workouts', BottomNav.dumbbell, Text('tests')),
+  Section(1, 'Workouts', BottomNav.dumbbell, ComingSoonPlaceholder(sectionName: 'Planning',)),
   Section(2, 'History', null, Text('testdsa')),
-  Section(3, 'History', BottomNav.history, Text('testdsa')),
-  Section(4, 'History', Icons.menu, Text('testdsa')),
+  Section(3, 'History', BottomNav.history, ComingSoonPlaceholder(sectionName: 'History')),
+  Section(4, 'History', Icons.menu, ComingSoonPlaceholder(sectionName: 'Menu',)),
 ];

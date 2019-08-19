@@ -50,11 +50,9 @@ class AppStore extends ChangeNotifier {
     final exercises = routine.sessions[currentSession].exercises;
     final sets = routine.progression.cycles[currentCycle].sets;
     final List<Tuple2<Exercise, ExerciseSet>> map = [];
-    int processedIdx = 0;
     for (var exercise in exercises) {
       for (var set in sets) {
         map.add(Tuple2(exercise, set));
-        processedIdx++;
       }
     }
     return map;
