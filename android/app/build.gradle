@@ -21,6 +21,10 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def dotenv = rootProject.file("../.env")
+def dotenvProperties = new Properties()
+dotenvProperties.load(new FileInputStream(dotenv))
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -44,6 +48,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "SENTRYDSN", "\"" + dotenvProperties['SENTRY_DSN'] + "\"")
     }
 
     buildTypes {
@@ -64,6 +69,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'io.sentry:sentry-android:1.7.26'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
