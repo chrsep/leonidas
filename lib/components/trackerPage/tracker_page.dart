@@ -29,10 +29,25 @@ class TrackerPage extends StatelessWidget {
       activities.add(RestItem(exercise.item2.rest));
     }
 
-    final nextActivities = activities.sublist(store.currentActivity);
+    final activitiesLeft = activities.sublist(store.currentActivity);
     final nextExerciseName = findNextExercise(activities, store.currentActivity)
         .exercise
         .name;
+
+    Color colorIdentifier;
+    String infoText;
+    if (!store.exerciseStarted) {
+      infoText = 'START IN...';
+    } else if (activitiesLeft[0] is ExerciseItem) {
+      colorIdentifier = LeonidasTheme.accentColor;
+      infoText = 'GO';
+    } else if (activitiesLeft[0] is RestItem) {
+      colorIdentifier = LeonidasTheme.primaryColor;
+      infoText = 'REST';
+    } else {
+      colorIdentifier = LeonidasTheme.whiteTint[1];
+      infoText = 'DO YO BEST';
+    }
 
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],
@@ -42,9 +57,10 @@ class TrackerPage extends StatelessWidget {
           value.countdownCallback = () {
             value.countUp();
             if (store.currentActivity == 0) {
+              store.exerciseStarted = true;
               return;
             }
-            if (nextActivities[0] is HeaderItem) {
+            if (activitiesLeft[0] is HeaderItem) {
               store.currentActivity = store.currentActivity + 2;
             } else {
               store.currentActivity++;
@@ -52,13 +68,13 @@ class TrackerPage extends StatelessWidget {
           };
           return FloatingActionButton.extended(
             onPressed: () {
-              if (nextActivities[0] is HeaderItem) {
+              if (activitiesLeft[0] is HeaderItem) {
                 store.currentActivity = store.currentActivity + 2;
               } else {
                 store.currentActivity++;
               }
               value.stop();
-              final nextActivity = nextActivities[1];
+              final nextActivity = activitiesLeft[1];
               if (store.currentActivity != 0 && nextActivity is RestItem) {
                 value.countdownFrom(nextActivity.duration);
               } else {
@@ -74,6 +90,11 @@ class TrackerPage extends StatelessWidget {
           children: [
             // Only the tree below needs to be updated
             // when countdown changes.
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Text(infoText,
+                style: LeonidasTheme.subtitle1.apply(color: colorIdentifier),),
+            ),
             Consumer<CountdownTimer>(
               builder: (context, value, child) {
                 return Center(
@@ -88,8 +109,9 @@ class TrackerPage extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
-                  nextExerciseName ?? '',
-                  style: LeonidasTheme.h4Heavy,
+                  nextExerciseName.toUpperCase() ?? '',
+                  style: LeonidasTheme.h4Heavy.apply(color: Colors.white),
+
                 ),
               ),
             ),
@@ -97,11 +119,16 @@ class TrackerPage extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: ListView.builder(
-                  itemCount: nextActivities.length,
+                  itemCount: activitiesLeft.length,
                   itemBuilder: (context, index) {
-                    final activity = nextActivities[index];
+                    final activity = activitiesLeft[index];
+                    final cardColor = store.exerciseStarted && index == 0
+                        ? colorIdentifier
+                        : null;
+
                     if (activity is ExerciseItem) {
                       return Card(
+                        color: cardColor,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Flex(
@@ -126,7 +153,7 @@ class TrackerPage extends StatelessWidget {
                       );
                     } else if (activity is RestItem) {
                       return Card(
-                        color: LeonidasTheme.whiteTint[1],
+                        color: cardColor ?? LeonidasTheme.whiteTint[1],
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Flex(

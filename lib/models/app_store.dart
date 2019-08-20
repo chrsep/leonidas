@@ -13,10 +13,20 @@ class AppStore extends ChangeNotifier {
   final List<Routine> routines;
 
   // Progress of our current workout.
-  int currentSession = 0;
-  int currentCycle = 0;
-  int _currentActivity = 0;
-  int selectedRoutineIdx = 0;
+  var currentSession = 0;
+  var currentCycle = 0;
+  var _currentActivity = 0;
+  var selectedRoutineIdx = 0;
+  var _exerciseStarted = false;
+
+  set exerciseStarted(bool value) {
+    _exerciseStarted = value;
+        notifyListeners();
+  }
+
+  bool get exerciseStarted {
+    return _exerciseStarted;
+  }
 
   set currentActivity(int value) {
     _currentActivity = value;
