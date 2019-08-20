@@ -5,6 +5,8 @@ import 'package:leonidas/components/diary_section.dart';
 import 'package:leonidas/components/coming_soon_placeholder.dart';
 import 'package:leonidas/components/trackerPage/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
+import 'package:leonidas/leonidas_theme.dart';
+import 'package:leonidas/models/app_store.dart';
 import 'package:leonidas/models/countdown_timer.dart';
 import 'package:provider/provider.dart';
 
@@ -18,13 +20,14 @@ class HomePage extends StatefulWidget {
 // Handle top level navigation between sections
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final List<Key> _sectionKeys =
-      List.generate(sections.length, (_) => GlobalKey());
+  List.generate(sections.length, (_) => GlobalKey());
 
   final List<BottomNavigationBarItem> _bottomNavItems = sections
-      .map((Section section) => BottomNavigationBarItem(
-            icon: Icon(section.icon),
-            title: Text(section.title),
-          ))
+      .map((Section section) =>
+      BottomNavigationBarItem(
+        icon: Icon(section.icon),
+        title: Text(section.title),
+      ))
       .toList();
 
   int _currPageIndex = 0;
@@ -38,19 +41,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     height = 100;
     _faders = sections
-        .map<AnimationController>((Section section) => AnimationController(
+        .map<AnimationController>((Section section) =>
+        AnimationController(
             vsync: this, duration: Duration(milliseconds: 200)))
         .toList();
     _sectionWidgets = sections
-        .map((Section section) => FadeTransition(
-              opacity: _faders[section.index].drive(
-                CurveTween(curve: Curves.fastOutSlowIn),
-              ),
-              child: KeyedSubtree(
-                key: _sectionKeys[section.index],
-                child: section.page,
-              ),
-            ))
+        .map((Section section) =>
+        FadeTransition(
+          opacity: _faders[section.index].drive(
+            CurveTween(curve: Curves.fastOutSlowIn),
+          ),
+          child: KeyedSubtree(
+            key: _sectionKeys[section.index],
+            child: section.page,
+          ),
+        ))
         .toList();
   }
 
@@ -58,14 +63,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      floatingActionButton: Consumer<CountdownTimer>(
-        builder: (context, value, child) {
-          return FloatingActionButton(
-            child: Icon(Icons.play_arrow),
-            onPressed: () {
-              value.countdownFrom(10);
-              Navigator.of(context)
-                  .push<TrackerPage>(TrackerPage.createRoute());
+      floatingActionButton: Consumer<AppStore>(
+        builder: (context, store, child) {
+          return Consumer<CountdownTimer>(
+            builder: (context, timer, child) {
+              return FloatingActionButton.extended(
+                label: Text(store.exerciseStarted || timer.isCounting
+                    ? timer.toString()
+                    : 'START'),
+                onPressed: () {
+                  if (!store.exerciseStarted && !timer.isCounting) {
+                    timer.countdownFrom(10);
+                  }
+                  Navigator.of(context)
+                      .push<TrackerPage>(TrackerPage.createRoute());
+                },
+              );
             },
           );
         },
@@ -73,12 +86,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Color(0xFF121212),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
         clipBehavior: Clip.hardEdge,
         child: BottomNavigationBar(
+          backgroundColor: LeonidasTheme.whiteTint[4],
           type: BottomNavigationBarType.fixed,
-          showUnselectedLabels: false,
-          showSelectedLabels: false,
+          showUnselectedLabels: true,
+          showSelectedLabels: true,
           currentIndex: _currPageIndex,
           items: _bottomNavItems,
           onTap: (newIndex) {
@@ -131,9 +144,22 @@ class Section {
 }
 
 List<Section> sections = [
-  Section(0, 'Tracker', BottomNav.diary, DiarySection()),
-  Section(1, 'Workouts', BottomNav.dumbbell, ComingSoonPlaceholder(sectionName: 'Planning',)),
-  Section(2, 'History', null, Text('testdsa')),
-  Section(3, 'History', BottomNav.history, ComingSoonPlaceholder(sectionName: 'History')),
-  Section(4, 'History', Icons.menu, ComingSoonPlaceholder(sectionName: 'Menu',)),
+  Section(0, 'Diary', BottomNav.diary, DiarySection()),
+  Section(
+      1,
+      'Plans',
+      BottomNav.dumbbell,
+      ComingSoonPlaceholder(
+        sectionName: 'Planning',
+      )),
+  Section(2, '', null, Text('testdsa')),
+  Section(3, 'History', BottomNav.history,
+      ComingSoonPlaceholder(sectionName: 'History')),
+  Section(
+      4,
+      'Menu',
+      Icons.menu,
+      ComingSoonPlaceholder(
+        sectionName: 'Menu',
+      )),
 ];

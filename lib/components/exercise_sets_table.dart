@@ -44,7 +44,6 @@ class ExerciseSetsTable extends StatelessWidget {
               child: Card(
                 color: LeonidasTheme.whiteTint[1],
                 child: DataTable(
-                  columnSpacing: 24,
                   columns: const <DataColumn>[
                     DataColumn(label: Text('Set')),
                     DataColumn(label: Text('Reps')),

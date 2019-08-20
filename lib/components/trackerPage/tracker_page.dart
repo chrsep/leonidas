@@ -36,22 +36,27 @@ class TrackerPage extends StatelessWidget {
 
     Color colorIdentifier;
     String infoText;
+    String buttonText;
     if (!store.exerciseStarted) {
-      infoText = 'START IN...';
+      infoText = 'STARTS IN...';
+      buttonText = 'START NOW';
     } else if (activitiesLeft[0] is ExerciseItem) {
       colorIdentifier = LeonidasTheme.accentColor;
+      buttonText = 'DID IT';
       infoText = 'GO';
     } else if (activitiesLeft[0] is RestItem) {
       colorIdentifier = LeonidasTheme.primaryColor;
       infoText = 'REST';
+      buttonText = 'SKIP REST';
     } else {
-      colorIdentifier = LeonidasTheme.whiteTint[1];
-      infoText = 'DO YO BEST';
+      colorIdentifier = LeonidasTheme.accentColor;
+      infoText = 'GO';
+      buttonText = 'DID IT';
     }
 
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Consumer<CountdownTimer>(
         builder: (context, value, child) {
           value.countdownCallback = () {
@@ -74,7 +79,9 @@ class TrackerPage extends StatelessWidget {
             }
           };
           return FloatingActionButton.extended(
+            backgroundColor: colorIdentifier,
             onPressed: () {
+              store.exerciseStarted = true;
               if (activitiesLeft[0] is HeaderItem) {
                 store.currentActivity = store.currentActivity + 2;
               } else {
@@ -88,9 +95,106 @@ class TrackerPage extends StatelessWidget {
                 value.countUp();
               }
             },
-            label: Text('FINISH'),
+            label: Text(buttonText),
           );
         },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: LeonidasTheme.whiteTint[4],
+        child: Container(
+          child: Consumer<CountdownTimer>(builder: (context, timer, _) {
+            return Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    showDialog<AlertDialog>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('Cancel workout session?'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('NO'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('YES'),
+                              onPressed: () {
+                                timer.stop();
+                                store.exerciseStarted = false;
+                                store.currentActivity = 0;
+
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.home),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                IconButton(
+                  icon: Icon(timer.isCounting ? Icons.pause : Icons.play_arrow),
+                  onPressed: () {
+                    if (timer.isCounting) {
+                      timer.pause();
+                    } else {
+                      timer.continueCounting();
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.settings_backup_restore),
+                  onPressed: () {
+                    showDialog<AlertDialog>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('Reset current timer?'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('NO'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('YES'),
+                              onPressed: () {
+                                final currentActivity =
+                                    (activitiesLeft[0] is HeaderItem)
+                                        ? activitiesLeft[1]
+                                        : activitiesLeft[0];
+                                if (currentActivity is ExerciseItem) {
+                                  timer.timeLeft = 0;
+                                } else if (currentActivity is RestItem) {
+                                  timer.timeLeft = currentActivity.duration;
+                                } else {
+                                  timer.timeLeft = 10;
+                                }
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                )
+              ],
+            );
+          }),
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -130,7 +234,9 @@ class TrackerPage extends StatelessWidget {
                   itemCount: activitiesLeft.length,
                   itemBuilder: (context, index) {
                     final activity = activitiesLeft[index];
-                    final cardColor = store.exerciseStarted && index == 0
+                    final cardColor = store.exerciseStarted && index == 0 ||
+                            // In case first item is actually a header
+                            activitiesLeft[0] is HeaderItem && index == 1
                         ? colorIdentifier
                         : null;
 
@@ -214,15 +320,15 @@ class TrackerPage extends StatelessWidget {
     return PageRouteBuilder<TrackerPage>(
       pageBuilder: (context, animation, secondaryAnimation) => TrackerPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final begin = Offset(0.0, 1.0);
-        final end = Offset.zero;
+        const begin = 0.0;
+        const end = 1.0;
         final curve = Curves.ease;
         final tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        final offsetAnimation = animation.drive(tween);
+        final opacityAnimation = animation.drive(tween);
 
-        return SlideTransition(
-          position: offsetAnimation,
+        return FadeTransition(
+          opacity: opacityAnimation,
           child: child,
         );
       },

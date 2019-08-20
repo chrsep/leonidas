@@ -6,10 +6,29 @@ enum CountingDirection { up, down }
 
 class CountdownTimer extends ChangeNotifier {
   int _timeLeft = 0;
-  bool isCounting = false;
-  Timer timer;
+  bool _isCounting = false;
+
+  bool get isCounting => _isCounting;
+
+  set isCounting(bool isCounting) {
+    _isCounting = isCounting;
+    notifyListeners();
+  }
+  Timer _timer;
   CountingDirection countingDirection = CountingDirection.down;
   Function countdownCallback;
+
+  set timer(Timer newTimer) {
+    if(_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
+    _timer = newTimer;
+  }
+
+  Timer get timer {
+    return _timer;
+  }
 
   set timeLeft(int value) {
     _timeLeft = value;
@@ -56,6 +75,7 @@ class CountdownTimer extends ChangeNotifier {
   int stop() {
     final timeOnCancelled = timeLeft;
     timer.cancel();
+    timer = null;
     timeLeft = 0;
     isCounting = false;
     return timeOnCancelled;
@@ -63,23 +83,26 @@ class CountdownTimer extends ChangeNotifier {
 
   void pause() {
     timer.cancel();
+    timer = null;
     isCounting = false;
   }
 
   void continueCounting() {
-    if (countingDirection == CountingDirection.up) {
+    if (countingDirection == CountingDirection.down) {
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
         timeLeft--;
         if (timeLeft == 0) {
           timer.cancel();
           isCounting = false;
+          countdownCallback();
         }
       });
     } else {
-      Timer.periodic(Duration(seconds: 1), (timer) {
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
         timeLeft++;
       });
     }
+    isCounting = true;
   }
 }
 
