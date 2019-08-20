@@ -119,13 +119,13 @@ class TrackerPage extends StatelessWidget {
                           content: Text('Cancel workout session?'),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text('NO'),
+                              child: Text('No'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             FlatButton(
-                              child: Text('YES'),
+                              child: Text('Yes'),
                               onPressed: () {
                                 timer.stop();
                                 store.exerciseStarted = false;
@@ -164,22 +164,22 @@ class TrackerPage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          content: Text('Reset current timer?'),
+                          content: Text('Do you want to reset?'),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text('NO'),
+                              child: Text('No'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             FlatButton(
-                              child: Text('YES'),
+                              child: Text('Reset timer'),
                               onPressed: () {
                                 final currentActivity =
                                     (activitiesLeft[0] is HeaderItem)
                                         ? activitiesLeft[1]
                                         : activitiesLeft[0];
-                                if (!store.exerciseStarted){
+                                if (!store.exerciseStarted) {
                                   timer.timeLeft = 10;
                                 } else if (currentActivity is ExerciseItem) {
                                   timer.timeLeft = 0;
@@ -188,6 +188,15 @@ class TrackerPage extends StatelessWidget {
                                 } else {
                                   timer.timeLeft = 10;
                                 }
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('Reset session'),
+                              onPressed: () {
+                                timer.countdownFrom(10);
+                                store.exerciseStarted = false;
+                                store.currentActivity = 0;
                                 Navigator.of(context).pop();
                               },
                             )
