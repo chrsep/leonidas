@@ -56,9 +56,13 @@ class TrackerPage extends StatelessWidget {
         builder: (context, value, child) {
           value.countdownCallback = () {
             value.countUp();
-            if (Vibration.hasVibrator() ?? false) {
-              Vibration.vibrate();
-            }
+            Vibration.hasVibrator().then<void>((dynamic value) {
+              if (value) {
+                return Vibration.vibrate();
+              } else {
+                return null;
+              }
+            });
             if (store.currentActivity == 0) {
               store.exerciseStarted = true;
               return;
