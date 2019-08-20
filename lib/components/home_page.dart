@@ -68,7 +68,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           return Consumer<CountdownTimer>(
             builder: (context, timer, child) {
               return FloatingActionButton.extended(
-                label: Text(store.exerciseStarted || timer.isCounting
+                // to prevent label from changing right away during transition
+                // we need to wait until time left is under 9
+                label: Text(store.exerciseStarted || timer.isCounting && timer.timeLeft < 9
                     ? timer.toString()
                     : 'START'),
                 onPressed: () {

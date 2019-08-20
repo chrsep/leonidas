@@ -132,16 +132,20 @@ class TrackerPage extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          content: Text('Do you want to reset?'),
+                          title: Text('Do you want to restart?'),
+                          content: Text(
+                              'You can restart session to start from the very beginning '
+                              'or only restart timer to start your current '
+                              'activity from the  beginning.'),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text('No'),
+                              child: Text('Cancel'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
                             ),
                             FlatButton(
-                              child: Text('Reset timer'),
+                              child: Text('Restart timer'),
                               onPressed: () {
                                 final currentActivity =
                                     (activitiesLeft[0] is HeaderItem)
@@ -160,7 +164,7 @@ class TrackerPage extends StatelessWidget {
                               },
                             ),
                             FlatButton(
-                              child: Text('Reset session'),
+                              child: Text('Restart session'),
                               onPressed: () {
                                 timer.countdownFrom(10);
                                 store.exerciseStarted = false;

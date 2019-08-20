@@ -6,15 +6,9 @@ enum CountingDirection { up, down }
 
 class CountdownTimer extends ChangeNotifier {
   int _timeLeft = 0;
-  bool _isCounting = false;
-
-  bool get isCounting => _isCounting;
-
-  set isCounting(bool isCounting) {
-    _isCounting = isCounting;
-    notifyListeners();
+  bool get isCounting {
+    return timer != null;
   }
-
   Timer _timer;
   CountingDirection countingDirection = CountingDirection.down;
   Function countdownCallback;
@@ -25,6 +19,7 @@ class CountdownTimer extends ChangeNotifier {
       _timer = null;
     }
     _timer = newTimer;
+    notifyListeners();
   }
 
   Timer get timer {
@@ -46,7 +41,6 @@ class CountdownTimer extends ChangeNotifier {
   }
 
   void countdownFrom(int lengthInSecond, {Function callback}) {
-    isCounting = true;
     timeLeft = lengthInSecond;
     countingDirection = CountingDirection.down;
     if (callback != null) {
@@ -55,17 +49,15 @@ class CountdownTimer extends ChangeNotifier {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       timeLeft--;
       if (timeLeft == 0) {
+        timer.cancel();
         if (countdownCallback != null) {
           countdownCallback();
         }
-        isCounting = false;
-        timer.cancel();
       }
     });
   }
 
   void countUp() {
-    isCounting = true;
     timeLeft = 0;
     countingDirection = CountingDirection.up;
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -80,14 +72,12 @@ class CountdownTimer extends ChangeNotifier {
       timer = null;
     }
     timeLeft = 0;
-    isCounting = false;
     return timeOnCancelled;
   }
 
   void pause() {
     timer.cancel();
     timer = null;
-    isCounting = false;
   }
 
   void continueCounting() {
@@ -96,7 +86,6 @@ class CountdownTimer extends ChangeNotifier {
         timeLeft--;
         if (timeLeft == 0) {
           timer.cancel();
-          isCounting = false;
           countdownCallback();
         }
       });
@@ -105,7 +94,6 @@ class CountdownTimer extends ChangeNotifier {
         timeLeft++;
       });
     }
-    isCounting = true;
   }
 }
 
