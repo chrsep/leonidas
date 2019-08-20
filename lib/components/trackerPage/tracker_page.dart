@@ -81,7 +81,11 @@ class TrackerPage extends StatelessWidget {
           return FloatingActionButton.extended(
             backgroundColor: colorIdentifier,
             onPressed: () {
-              store.exerciseStarted = true;
+              if (!store.exerciseStarted) {
+                store.exerciseStarted = true;
+                value.countUp();
+                return;
+              }
               if (activitiesLeft[0] is HeaderItem) {
                 store.currentActivity = store.currentActivity + 2;
               } else {
@@ -175,7 +179,9 @@ class TrackerPage extends StatelessWidget {
                                     (activitiesLeft[0] is HeaderItem)
                                         ? activitiesLeft[1]
                                         : activitiesLeft[0];
-                                if (currentActivity is ExerciseItem) {
+                                if (!store.exerciseStarted){
+                                  timer.timeLeft = 10;
+                                } else if (currentActivity is ExerciseItem) {
                                   timer.timeLeft = 0;
                                 } else if (currentActivity is RestItem) {
                                   timer.timeLeft = currentActivity.duration;
