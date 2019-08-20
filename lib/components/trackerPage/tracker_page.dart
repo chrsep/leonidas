@@ -5,6 +5,7 @@ import 'package:leonidas/leonidas_theme.dart';
 import 'package:leonidas/models/app_store.dart';
 import 'package:leonidas/models/countdown_timer.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class TrackerPage extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class TrackerPage extends StatelessWidget {
       final exercise = exerciseList[i];
       if (i > 1) {
         final ExerciseItem lastExerciseItem =
-        activities.lastWhere((activity) => activity is ExerciseItem);
+            activities.lastWhere((activity) => activity is ExerciseItem);
         if (lastExerciseItem.exercise.name != exercise.item1.name) {
           activities.add(HeaderItem(exercise.item1.name));
         }
@@ -30,9 +31,8 @@ class TrackerPage extends StatelessWidget {
     }
 
     final activitiesLeft = activities.sublist(store.currentActivity);
-    final nextExerciseName = findNextExercise(activities, store.currentActivity)
-        .exercise
-        .name;
+    final nextExerciseName =
+        findNextExercise(activities, store.currentActivity).exercise.name;
 
     Color colorIdentifier;
     String infoText;
@@ -56,6 +56,9 @@ class TrackerPage extends StatelessWidget {
         builder: (context, value, child) {
           value.countdownCallback = () {
             value.countUp();
+            if (Vibration.hasVibrator() ?? false) {
+              Vibration.vibrate();
+            }
             if (store.currentActivity == 0) {
               store.exerciseStarted = true;
               return;
@@ -92,8 +95,10 @@ class TrackerPage extends StatelessWidget {
             // when countdown changes.
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: Text(infoText,
-                style: LeonidasTheme.subtitle1.apply(color: colorIdentifier),),
+              child: Text(
+                infoText,
+                style: LeonidasTheme.subtitle1.apply(color: colorIdentifier),
+              ),
             ),
             Consumer<CountdownTimer>(
               builder: (context, value, child) {
@@ -111,7 +116,6 @@ class TrackerPage extends StatelessWidget {
                 child: Text(
                   nextExerciseName.toUpperCase() ?? '',
                   style: LeonidasTheme.h4Heavy.apply(color: Colors.white),
-
                 ),
               ),
             ),
@@ -169,14 +173,14 @@ class TrackerPage extends StatelessWidget {
                     } else if (activity is HeaderItem) {
                       return index > 0
                           ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            activity.value,
-                            style: LeonidasTheme.h4,
-                          ),
-                        ),
-                      )
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  activity.value,
+                                  style: LeonidasTheme.h4,
+                                ),
+                              ),
+                            )
                           : Container();
                     } else {
                       return null;
@@ -191,13 +195,15 @@ class TrackerPage extends StatelessWidget {
     );
   }
 
-  ExerciseItem findNextExercise(List<ActivityListItem> activities,
-      int currentActivityIdx,) {
+  ExerciseItem findNextExercise(
+    List<ActivityListItem> activities,
+    int currentActivityIdx,
+  ) {
     return activities.isEmpty
         ? null
         : activities
-        .sublist(currentActivityIdx - 1 > 0 ? currentActivityIdx - 1 : 0)
-        .firstWhere((activity) => activity is ExerciseItem);
+            .sublist(currentActivityIdx - 1 > 0 ? currentActivityIdx - 1 : 0)
+            .firstWhere((activity) => activity is ExerciseItem);
   }
 
   static Route createRoute() {
@@ -208,7 +214,7 @@ class TrackerPage extends StatelessWidget {
         final end = Offset.zero;
         final curve = Curves.ease;
         final tween =
-        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         final offsetAnimation = animation.drive(tween);
 
         return SlideTransition(

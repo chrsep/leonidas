@@ -46,7 +46,6 @@ class ExerciseSetsTable extends StatelessWidget {
                 child: DataTable(
                   columnSpacing: 24,
                   columns: const <DataColumn>[
-                    DataColumn(label: Text('load')),
                     DataColumn(label: Text('Set')),
                     DataColumn(label: Text('Reps')),
                     DataColumn(label: Text('Weight')),
@@ -57,7 +56,6 @@ class ExerciseSetsTable extends StatelessWidget {
                     final calculatedWeight = calculateWeight(exercise, routine, set);
                     return DataRow(
                       cells: [
-                        DataCell(Text(set.tmPercentage.toString() + '%')),
                         DataCell(Text(set.sets.toString())),
                         DataCell(Text(set.reps.toString())),
                         DataCell(Text(calculatedWeight.toString() + 'kg')),
