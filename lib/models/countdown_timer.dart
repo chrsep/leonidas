@@ -14,12 +14,13 @@ class CountdownTimer extends ChangeNotifier {
     _isCounting = isCounting;
     notifyListeners();
   }
+
   Timer _timer;
   CountingDirection countingDirection = CountingDirection.down;
   Function countdownCallback;
 
   set timer(Timer newTimer) {
-    if(_timer != null) {
+    if (_timer != null) {
       _timer.cancel();
       _timer = null;
     }
@@ -74,8 +75,10 @@ class CountdownTimer extends ChangeNotifier {
 
   int stop() {
     final timeOnCancelled = timeLeft;
-    timer.cancel();
-    timer = null;
+    if (timer != null) {
+      timer.cancel();
+      timer = null;
+    }
     timeLeft = 0;
     isCounting = false;
     return timeOnCancelled;
@@ -110,8 +113,8 @@ String secondIntFormat(int inputSecond) {
   final minutes = (inputSecond / 60).floor();
   final seconds = inputSecond - 60 * minutes;
   final minutesString =
-      minutes > 9 ? minutes.toString() : '0' + minutes.toString();
+  minutes > 9 ? minutes.toString() : '0' + minutes.toString();
   final secondString =
-      seconds > 9 ? seconds.toString() : '0' + seconds.toString();
+  seconds > 9 ? seconds.toString() : '0' + seconds.toString();
   return minutesString + ':' + secondString;
 }

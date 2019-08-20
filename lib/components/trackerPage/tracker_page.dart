@@ -110,38 +110,6 @@ class TrackerPage extends StatelessWidget {
             return Row(
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () {
-                    showDialog<AlertDialog>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text('Cancel workout session?'),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('No'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            FlatButton(
-                              child: Text('Yes'),
-                              onPressed: () {
-                                timer.stop();
-                                store.exerciseStarted = false;
-                                store.currentActivity = 0;
-
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                IconButton(
                   icon: Icon(Icons.home),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -205,7 +173,39 @@ class TrackerPage extends StatelessWidget {
                       },
                     );
                   },
-                )
+                ),
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    showDialog<AlertDialog>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text('Cancel workout session?'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                timer.stop();
+                                store.exerciseStarted = false;
+                                store.currentActivity = 0;
+
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ],
             );
           }),
@@ -224,11 +224,17 @@ class TrackerPage extends StatelessWidget {
               ),
             ),
             Consumer<CountdownTimer>(
-              builder: (context, value, child) {
+              builder: (context, timer, child) {
                 return Center(
-                  child: Text(
-                    value.toString(),
-                    style: LeonidasTheme.h1.apply(color: Colors.white),
+                  child: AnimatedDefaultTextStyle(
+                    child: Text(
+                      timer.toString(),
+                    ),
+                    curve: Curves.bounceInOut,
+                    style: timer.isCounting
+                        ? LeonidasTheme.h1.apply(color: Colors.white)
+                        : LeonidasTheme.h1.apply(color: Colors.white30),
+                    duration: Duration(milliseconds: 256),
                   ),
                 );
               },
