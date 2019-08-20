@@ -67,15 +67,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         builder: (context, store, child) {
           return Consumer<CountdownTimer>(
             builder: (context, timer, child) {
+              String fabText;
+              if (store.isExercising || timer.isCounting && timer.timeLeft < 9) {
+                fabText = timer.toString();
+              } else if (store.isLoggingResult) {
+                fabText = 'LOG';
+              } else {
+                fabText = 'START';
+              }
               return FloatingActionButton.extended(
                 // to prevent label from changing right away during transition
                 // we need to wait until time left is under 9
-                label: Text(store.exerciseStarted || timer.isCounting && timer.timeLeft < 9
-                    ? timer.toString()
-                    : 'START'),
+                label: Text(fabText),
                 onPressed: () {
-                  if (!store.exerciseStarted && !timer.isCounting) {
+                  if (!store.isExercising && !timer.isCounting) {
                     timer.countdownFrom(10);
+                  }
+                  if (!store.isLoggingResult) {
+                    store.currentActivity = 0;
                   }
                   Navigator.of(context)
                       .push<TrackerPage>(TrackerPage.createRoute());

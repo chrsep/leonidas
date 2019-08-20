@@ -30,6 +30,7 @@ dependencies:
   provider: ^3.0.0
   tuple: ^1.0.2
   vibration: ^1.2.1
+  intl: ^0.15.8
 
 dev_dependencies:
   flutter_launcher_icons: "^0.7.2"

@@ -14,17 +14,41 @@ class AppStore extends ChangeNotifier {
 
   // Progress of our current workout.
   var currentSession = 0;
-  var currentCycle = 0;
+  var currentCycle = 2;
   var _currentActivity = 0;
   var selectedRoutineIdx = 0;
   var _exerciseStarted = false;
+  var isLoggingResult = false;
 
-  set exerciseStarted(bool value) {
-    _exerciseStarted = value;
-        notifyListeners();
+  DateTime _exerciseStartTime;
+  DateTime _exerciseStopTime;
+
+  DateTime get exerciseStopTime => _exerciseStopTime;
+
+  set exerciseStopTime(DateTime exerciseStopTime) {
+    _exerciseStopTime = exerciseStopTime;
+    notifyListeners();
   }
 
-  bool get exerciseStarted {
+  DateTime get exerciseStartTime => _exerciseStartTime;
+
+  set exerciseStartTime(DateTime exerciseStartTime) {
+    _exerciseStartTime = exerciseStartTime;
+    notifyListeners();
+  }
+
+  set isExercising(bool value) {
+    _exerciseStarted = value;
+    if (value) {
+      exerciseStartTime = DateTime.now();
+      exerciseStopTime = null;
+    } else {
+      exerciseStopTime = DateTime.now();
+    }
+    notifyListeners();
+  }
+
+  bool get isExercising {
     return _exerciseStarted;
   }
 
@@ -66,5 +90,22 @@ class AppStore extends ChangeNotifier {
       }
     }
     return map;
+  }
+
+  void startExercise() {
+    currentActivity = 0;
+  }
+
+  void finishWorkout() {
+    isLoggingResult = true;
+    isExercising = false;
+  }
+
+  void finishLogging() {
+    isLoggingResult = false;
+  }
+
+  void cancelExercise() {
+    isExercising = false;
   }
 }
