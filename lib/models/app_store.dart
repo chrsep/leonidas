@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/history.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'exercise.dart';
 import 'exercise_set.dart';
@@ -13,8 +14,35 @@ class AppStore extends ChangeNotifier {
   final List<Routine> routines;
 
   // Progress of our current workout.
-  var currentSessionIdx = 0;
-  var currentCycleIdx = 2;
+  var _currentSessionIdx = 0;
+
+  int get currentSessionIdx => _currentSessionIdx;
+
+  set currentSessionIdx(int currentSessionIdx) {
+    SharedPreferences.getInstance().then((prefs) {
+      return prefs.setInt('current_session_idx', currentSessionIdx);
+    }).then((onValue) {
+      if (onValue) {
+        _currentSessionIdx = currentSessionIdx;
+      }
+    });
+  }
+
+  var _currentCycleIdx = 2;
+
+  int get currentCycleIdx => _currentCycleIdx;
+
+  set currentCycleIdx(int currentCycleIdx) {
+    _currentCycleIdx = currentCycleIdx;
+    SharedPreferences.getInstance().then((prefs) {
+      return prefs.setInt('current_cycle_idx', currentSessionIdx);
+    }).then((onValue) {
+      if (onValue) {
+        _currentCycleIdx = currentCycleIdx;
+      }
+    });
+  }
+
   var _currentActivity = 0;
   var selectedRoutineIdx = 0;
   var _exerciseStarted = false;
