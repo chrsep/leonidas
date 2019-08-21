@@ -1,8 +1,9 @@
 // This is the first widget our application renders
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:leonidas/components/diary_section.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:leonidas/components/coming_soon_placeholder.dart';
+import 'package:leonidas/components/diary_section.dart';
 import 'package:leonidas/components/trackerPage/tracker_page.dart';
 import 'package:leonidas/icons/bottom_nav_icons.dart';
 import 'package:leonidas/leonidas_theme.dart';
@@ -20,14 +21,13 @@ class HomePage extends StatefulWidget {
 // Handle top level navigation between sections
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final List<Key> _sectionKeys =
-  List.generate(sections.length, (_) => GlobalKey());
+      List.generate(sections.length, (_) => GlobalKey());
 
   final List<BottomNavigationBarItem> _bottomNavItems = sections
-      .map((Section section) =>
-      BottomNavigationBarItem(
-        icon: Icon(section.icon),
-        title: Text(section.title),
-      ))
+      .map((Section section) => BottomNavigationBarItem(
+            icon: Icon(section.icon),
+            title: Text(section.title),
+          ))
       .toList();
 
   int _currPageIndex = 0;
@@ -41,21 +41,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     height = 100;
     _faders = sections
-        .map<AnimationController>((Section section) =>
-        AnimationController(
+        .map<AnimationController>((Section section) => AnimationController(
             vsync: this, duration: Duration(milliseconds: 200)))
         .toList();
     _sectionWidgets = sections
-        .map((Section section) =>
-        FadeTransition(
-          opacity: _faders[section.index].drive(
-            CurveTween(curve: Curves.fastOutSlowIn),
-          ),
-          child: KeyedSubtree(
-            key: _sectionKeys[section.index],
-            child: section.page,
-          ),
-        ))
+        .map((Section section) => FadeTransition(
+              opacity: _faders[section.index].drive(
+                CurveTween(curve: Curves.fastOutSlowIn),
+              ),
+              child: KeyedSubtree(
+                key: _sectionKeys[section.index],
+                child: section.page,
+              ),
+            ))
         .toList();
   }
 
@@ -80,6 +78,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 // we need to wait until time left is under 9
                 label: Text(fabText),
                 onPressed: () {
+                  final localNotif = FlutterLocalNotificationsPlugin();
+                  // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+                  final initSettings = InitializationSettings(
+                      AndroidInitializationSettings('ic_notification'), null);
+                  localNotif.initialize(initSettings);
+
+                  final notifChannel = AndroidNotificationDetails(
+                      'workout session',
+                      'workout sesion',
+                      'For showing that workout tracking is on',
+                      ongoing: true,
+                      autoCancel: false,
+                      ticker: 'Aspis is tracking workout');
+                  final platformChannelSpecifics =
+                      NotificationDetails(notifChannel, null);
+                  localNotif.show(0, 'Tracking Workout', 'Tap to launch aspis.',
+                      platformChannelSpecifics);
+
                   if (!timer.isCounting) {
                     timer.countdownFrom(10);
                     store.exerciseStartTime = DateTime.now();

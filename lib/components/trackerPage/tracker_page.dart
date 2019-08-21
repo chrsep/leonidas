@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:leonidas/components/session_summary_page.dart';
 import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/app_store.dart';
@@ -227,6 +228,8 @@ class TrackerPage extends StatelessWidget {
       store.exerciseStopTime = DateTime.now();
       store.moveToNextSession();
       _resetTrackerStats(timer, store);
+      final localNotif = FlutterLocalNotificationsPlugin();
+      localNotif.cancelAll();
       Navigator.of(context)
           .pushReplacement<SessionSummaryPage, SessionSummaryPage>(
               SessionSummaryPage.createRoute());
