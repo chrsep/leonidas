@@ -65,19 +65,31 @@ class SessionProgress extends StatelessWidget {
           return FloatingActionButton.extended(
             backgroundColor: colorIdentifier,
             onPressed: () {
+              // If exercise is not started (we're still on the starting countdown),
+              // start it
               if (!store.isExercising) {
                 store.isExercising = true;
                 timer.countUp();
                 return;
               }
+
+              // Increment current activity twice to skip the header
+              // when topmost item is a header
               if (activityTodos[0] is HeaderItem) {
                 store.currentActivity = store.currentActivity + 2;
               } else {
                 store.currentActivity++;
               }
-              timer.stop();
+
+              // if there is no other activities, just stop.
+              if (activityTodos.length < 2) {
+                timer.stop();
+                return;
+              }
+
+              // Count up when next item is an exercise, countdown if its rest.
               final nextActivity = activityTodos[1];
-              if (store.currentActivity != 0 && nextActivity is RestItem) {
+              if (nextActivity is RestItem) {
                 timer.countdownFrom(nextActivity.duration);
               } else {
                 timer.countUp();
@@ -181,8 +193,8 @@ class SessionProgress extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final activity = activityTodos[index];
                     final cardColor = store.isExercising && index == 0 ||
-                        // In case first item is actually a header
-                        activityTodos[0] is HeaderItem && index == 1
+                            // In case first item is actually a header
+                            activityTodos[0] is HeaderItem && index == 1
                         ? colorIdentifier
                         : null;
 
@@ -191,9 +203,7 @@ class SessionProgress extends StatelessWidget {
                     } else if (activity is RestItem) {
                       return activity.buildWidget(cardColor);
                     } else if (activity is HeaderItem) {
-                      return index > 0
-                          ? activity.buildWidget()
-                          : Container();
+                      return index > 0 ? activity.buildWidget() : Container();
                     } else {
                       return null;
                     }
@@ -207,8 +217,8 @@ class SessionProgress extends StatelessWidget {
     );
   }
 
-  Widget _buildResetDialog(BuildContext context, CountdownTimer timer,
-      AppStore store) {
+  Widget _buildResetDialog(
+      BuildContext context, CountdownTimer timer, AppStore store) {
     return AlertDialog(
       title: Text('Do you want to restart?'),
       content: Text('You can restart session to start from the very beginning '
@@ -253,8 +263,8 @@ class SessionProgress extends StatelessWidget {
   }
 }
 
-Widget _buildCancelDialog(BuildContext context, AppStore store,
-    CountdownTimer timer) {
+Widget _buildCancelDialog(
+    BuildContext context, AppStore store, CountdownTimer timer) {
   return AlertDialog(
     content: Text('Cancel workout session?'),
     actions: <Widget>[
