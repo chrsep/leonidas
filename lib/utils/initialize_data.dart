@@ -1,9 +1,10 @@
 import 'package:leonidas/models/cycle.dart';
-import 'package:leonidas/models/session.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/exercise_set.dart';
 import 'package:leonidas/models/progression.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:leonidas/models/session.dart';
+import 'package:leonidas/models/weight_setup.dart';
 
 Routine generateSampleRoutine() {
   const name = 'Wendler 5/3/1';
@@ -56,6 +57,11 @@ Routine generateSampleRoutine() {
     ])
   ];
 
+
   final progression = Progression(cycles, exerciseProgression);
   return Routine(name, sessions, UnitOfMeasurement.metric, 90, progression);
+}
+
+WeightSetup generateSampleWeightSetup() {
+  return WeightSetup(0, 0, 0, 4, 4, 4, 0, 0, 8, 2, 'Barbell', 9);
 }

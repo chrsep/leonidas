@@ -11,12 +11,9 @@ class SessionSummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = Provider.of<AppStore>(context);
 
-    final Duration totalTime =
-        store.exerciseStopTime.difference(store.exerciseStartTime);
-    final session = store
-        .routines[store.selectedRoutineIdx].sessions[store.currentSessionIdx];
-    final cycle = store.routines[store.selectedRoutineIdx].progression
-        .cycles[store.currentCycleIdx];
+    final totalTime = store.exerciseStopTime.difference(store.exerciseStartTime);
+    final session = store.currentSession;
+    final cycle = store.currentCycle;
 
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],

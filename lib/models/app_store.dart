@@ -2,19 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/history.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:leonidas/models/session.dart';
+import 'package:leonidas/models/weight_setup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'cycle.dart';
 import 'exercise.dart';
 import 'exercise_set.dart';
 
 class AppStore extends ChangeNotifier {
-  AppStore(this.routines);
+  AppStore(this.routines, this.weightSetups);
 
   final List<History> histories = [];
   final List<Routine> routines;
+  final List<WeightSetup> weightSetups;
 
   // Progress of our current workout.
   var _currentSessionIdx = 0;
+  var _currentCycleIdx = 2;
+  var _currentActivity = 0;
+  var currentRoutineIdx = 0;
+  var selectedRoutineIdx = 0;
+  var _exerciseStarted = false;
+  var isLoggingResult = false;
+  DateTime _exerciseStartTime;
+  DateTime _exerciseStopTime;
 
   int get currentSessionIdx => _currentSessionIdx;
 
@@ -29,8 +41,6 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  var _currentCycleIdx = 2;
-
   int get currentCycleIdx => _currentCycleIdx;
 
   set currentCycleIdx(int currentCycleIdx) {
@@ -43,14 +53,6 @@ class AppStore extends ChangeNotifier {
     });
     notifyListeners();
   }
-
-  var _currentActivity = 0;
-  var selectedRoutineIdx = 0;
-  var _exerciseStarted = false;
-  var isLoggingResult = false;
-
-  DateTime _exerciseStartTime;
-  DateTime _exerciseStopTime;
 
   DateTime get exerciseStopTime => _exerciseStopTime;
 
@@ -114,7 +116,11 @@ class AppStore extends ChangeNotifier {
     return activities;
   }
 
-  Routine get currentRoutine => routines[selectedRoutineIdx];
+  Routine get currentRoutine => routines[currentRoutineIdx];
+
+  Cycle get currentCycle => currentRoutine.progression.cycles[currentCycleIdx];
+
+  Session get currentSession => currentRoutine.sessions[currentSessionIdx];
 
   List<Exercise> get currentExercises =>
       currentRoutine.sessions[currentSessionIdx].exercises;

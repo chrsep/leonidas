@@ -32,6 +32,7 @@ Future<Null> main() async {
 // Our application root widget, call this on test to render the whole App
 class Leonidas extends StatelessWidget {
   final sampleData = generateSampleRoutine();
+  final sampleWeightSetup = generateSampleWeightSetup();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class Leonidas extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           builder: (_) {
-            final store = AppStore([sampleData]);
+            final store = AppStore([sampleData], [sampleWeightSetup]);
             final prefs = SharedPreferences.getInstance();
             prefs.then((prefs) {
               return prefs.getInt('current_cycle_idx');

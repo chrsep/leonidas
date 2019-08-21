@@ -23,7 +23,7 @@ class _DiarySectionState extends State<DiarySection> {
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<AppStore>(context);
-    final selectedRoutine = store.routines[store.selectedRoutineIdx];
+    final selectedRoutine = store.routines[store.currentRoutineIdx];
     final selectedDay = selectedRoutine
         .sessions[isShowingNext ? store.nextSessionIdx : store.currentSessionIdx];
     final selectedCycle = selectedRoutine.progression
