@@ -56,7 +56,7 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get nextDayIdx {
+  int get nextSessionIdx {
     int modifier = 1;
     if (currentSessionIdx + modifier >= currentRoutine.sessions.length) {
       modifier = 0 - currentSessionIdx;
@@ -65,7 +65,7 @@ class AppStore extends ChangeNotifier {
   }
 
   int get nextCycleIdx {
-    int modifier = nextDayIdx == currentSessionIdx + 1 ? 0 : 1;
+    int modifier = nextSessionIdx == currentSessionIdx + 1 ? 0 : 1;
     if (currentCycleIdx + modifier >=
         currentRoutine.progression.cycles.length) {
       modifier = 0 - currentCycleIdx;
@@ -92,4 +92,13 @@ class AppStore extends ChangeNotifier {
 
   List<ExerciseSet> get currentSets =>
       currentRoutine.progression.cycles[currentCycleIdx].sets;
+
+  void moveToNextSession() {
+    final nextSessionIdx = this.nextSessionIdx;
+    final nextCycleIdx = this.nextCycleIdx;
+    if (nextSessionIdx == 0) {
+      currentCycleIdx = nextCycleIdx;
+    }
+    currentSessionIdx = nextSessionIdx;
+  }
 }

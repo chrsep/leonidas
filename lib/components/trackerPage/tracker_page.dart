@@ -225,10 +225,12 @@ class TrackerPage extends StatelessWidget {
       CountdownTimer timer, List<ActivityListItem> activityTodos) {
     if (activityTodos.isEmpty) {
       store.exerciseStopTime = DateTime.now();
+      store.moveToNextSession();
       _resetTrackerStats(timer, store);
       Navigator.of(context)
           .pushReplacement<SessionSummaryPage, SessionSummaryPage>(
               SessionSummaryPage.createRoute());
+
       return;
     }
     // If exercise is not started (we're still on the starting countdown),

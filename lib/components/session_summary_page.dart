@@ -27,9 +27,11 @@ class SessionSummaryPage extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(
-                  DateFormat('EEEE, MMM d').format(store.exerciseStartTime),
-                  style: LeonidasTheme.h3,
+                Flexible(
+                  child: Text(
+                    DateFormat('EEEE\nd MMM y').format(store.exerciseStartTime),
+                    style: LeonidasTheme.h2,
+                  ),
                 )
               ],
             ),
@@ -77,9 +79,6 @@ class SessionSummaryPage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          store.currentSessionIdx++;
-          store.currentActivity = 0;
-          store.isLoggingResult = false;
           Navigator.of(context).pop();
         },
         label: Text('CLOSE'),

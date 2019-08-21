@@ -25,7 +25,7 @@ class _DiarySectionState extends State<DiarySection> {
     final store = Provider.of<AppStore>(context);
     final selectedRoutine = store.routines[store.selectedRoutineIdx];
     final selectedDay = selectedRoutine
-        .sessions[isShowingNext ? store.nextDayIdx : store.currentSessionIdx];
+        .sessions[isShowingNext ? store.nextSessionIdx : store.currentSessionIdx];
     final selectedCycle = selectedRoutine.progression
         .cycles[isShowingNext ? store.nextCycleIdx : store.currentCycleIdx];
     return SingleChildScrollView(
