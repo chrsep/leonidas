@@ -228,8 +228,7 @@ class TrackerPage extends StatelessWidget {
       store.exerciseStopTime = DateTime.now();
       store.moveToNextSession();
       _resetTrackerStats(timer, store);
-      final localNotif = FlutterLocalNotificationsPlugin();
-      localNotif.cancelAll();
+
       Navigator.of(context)
           .pushReplacement<SessionSummaryPage, SessionSummaryPage>(
               SessionSummaryPage.createRoute());
@@ -270,6 +269,8 @@ class TrackerPage extends StatelessWidget {
   void _resetTrackerStats(CountdownTimer timer, AppStore store) {
     timer.stop();
     store.isExercising = false;
+    final localNotif = FlutterLocalNotificationsPlugin();
+    localNotif.cancelAll();
   }
 
   Widget _buildCancelDialog(
