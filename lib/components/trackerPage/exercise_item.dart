@@ -4,6 +4,7 @@ import 'package:leonidas/models/exercise_set.dart';
 import 'package:leonidas/models/routine.dart';
 import 'package:leonidas/models/weight_setup.dart';
 import 'package:leonidas/utils/weights.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../leonidas_theme.dart';
 
@@ -16,17 +17,32 @@ abstract class ActivityListItem {
 }
 
 class ExerciseItem extends ActivityListItem {
-  ExerciseItem(this.exercise, this.set, this.routine, this.weightSetup) : super(exercise.name);
+  ExerciseItem(this.exercise, this.set, this.routine, this.weightSetup)
+      : super(exercise.name);
 
   final Exercise exercise;
   final ExerciseSet set;
   final Routine routine;
   final WeightSetup weightSetup;
+  WeightSetup setupUsed;
 
   double get calculatedWeight {
     final calculatedWeight = calculateWeight(exercise, routine, set);
-    final newWeight= weightSetup.calculatePossibleWeight(calculatedWeight);
-    return newWeight.calculateTotalWeight();
+    setupUsed ??= weightSetup.calculatePossibleWeight(calculatedWeight);
+    return setupUsed.calculateTotalWeight();
+  }
+
+  List<Tuple2<int, int>> get getWeightUsed {
+    final calculatedWeight = calculateWeight(exercise, routine, set);
+    setupUsed ??= weightSetup.calculatePossibleWeight(calculatedWeight);
+
+    final List<int> weightValues = setupUsed.getWeightIntList();
+    final List<int> availableWeightPairs = setupUsed.getAvailableWeightList();
+    final List<Tuple2<int, int>> result = [];
+    for (var i = 0; i < weightValues.length; i++) {
+      result.add(Tuple2(weightValues[i], availableWeightPairs[i]));
+    }
+    return result;
   }
 
   @override
@@ -35,26 +51,51 @@ class ExerciseItem extends ActivityListItem {
   ) {
     return Card(
       color: colorIdentifier,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Flex(
-          direction: Axis.horizontal,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(
-              calculatedWeight.toString() + ' Kg',
-              style: LeonidasTheme.h5,
-            ),
-            Flex(
-              direction: Axis.vertical,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(set.sets.toString() + ' Sets'),
-                Text(set.reps.toString() + ' Reps'),
+                Text(
+                  calculatedWeight.toString() + ' Kg',
+                  style: LeonidasTheme.h5,
+                ),
+                Flex(
+                  direction: Axis.vertical,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(set.sets.toString() + ' Sets'),
+                    Text(set.reps.toString() + ' Reps'),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+          Divider(),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+              child: Row(
+                children: getWeightUsed.where((weights) {
+                  return weights.item2 > 0;
+                }).map((weights) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Chip(
+                      label: Text((weights.item2 * 2).toString() +
+                          ' x ' +
+                          (weights.item1 / 2.0).toString() +
+                          'Kg'),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
