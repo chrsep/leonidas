@@ -26,29 +26,29 @@ Routine generateSampleRoutine() {
     press: 2.5
   };
 
-  final warmUpCycle = [
-    ExerciseSet(1, 5, 40, 0, false, 60),
-    ExerciseSet(1, 5, 50, 1, false, 60),
-    ExerciseSet(1, 5, 60, 2, true, 60),
-  ];
+//  final warmUpCycle = [
+//    ExerciseSet(1, 5, 40, 0, false, 60),
+//    ExerciseSet(1, 5, 50, 1, false, 60),
+//    ExerciseSet(1, 5, 60, 2, true, 60),
+//  ];
 
   final cycles = [
     Cycle('5/5/5', [
-      ...warmUpCycle,
+//      ...warmUpCycle,
       ExerciseSet(1, 5, 65, 3, false, 120),
       ExerciseSet(1, 5, 75, 4, false, 120),
       ExerciseSet(1, 5, 85, 5, true, 120),
       ExerciseSet(5, 5, 65, 6, false, 120),
     ]),
     Cycle('3/3/3', [
-      ...warmUpCycle,
+//      ...warmUpCycle,
       ExerciseSet(1, 3, 65, 3, false, 120),
       ExerciseSet(1, 3, 75, 4, false, 120),
       ExerciseSet(1, 3, 85, 5, true, 120),
       ExerciseSet(5, 5, 65, 6, false, 120),
     ]),
     Cycle('5/3/1', [
-      ...warmUpCycle,
+//      ...warmUpCycle,
       ExerciseSet(1, 5, 75, 3, false, 120),
       ExerciseSet(1, 3, 85, 4, false, 120),
       ExerciseSet(1, 1, 95, 5, true, 120),
