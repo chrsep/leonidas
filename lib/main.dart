@@ -5,9 +5,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:leonidas/leonidas_theme.dart';
 import 'package:leonidas/models/app_store.dart';
 import 'package:leonidas/models/countdown_timer.dart';
-import 'package:leonidas/utils/sample_routine.dart';
+import 'package:leonidas/utils/initialize_data.dart';
 import 'package:leonidas/utils/sentry.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/home_page.dart';
 
@@ -37,7 +38,25 @@ class Leonidas extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => AppStore([sampleData]),
+          builder: (_) {
+            final store = AppStore([sampleData]);
+            final prefs = SharedPreferences.getInstance();
+            prefs.then((prefs) {
+              return prefs.getInt('current_cycle_idx');
+            }).then((currentCycleIdx) {
+              if(currentCycleIdx != null) {
+                store.currentCycleIdx = currentCycleIdx;
+              }
+            });
+            prefs.then((prefs) {
+              return prefs.getInt('current_session_idx');
+            }).then((currentSessionIdx) {
+              if(currentSessionIdx != null) {
+                store.currentSessionIdx = currentSessionIdx;
+              }
+            });
+            return store;
+          },
         ),
         ChangeNotifierProvider(
           builder: (_) => CountdownTimer(),

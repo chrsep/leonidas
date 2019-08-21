@@ -26,6 +26,7 @@ class AppStore extends ChangeNotifier {
         _currentSessionIdx = currentSessionIdx;
       }
     });
+    notifyListeners();
   }
 
   var _currentCycleIdx = 2;
@@ -33,14 +34,14 @@ class AppStore extends ChangeNotifier {
   int get currentCycleIdx => _currentCycleIdx;
 
   set currentCycleIdx(int currentCycleIdx) {
-    _currentCycleIdx = currentCycleIdx;
     SharedPreferences.getInstance().then((prefs) {
-      return prefs.setInt('current_cycle_idx', currentSessionIdx);
+      return prefs.setInt('current_cycle_idx', currentCycleIdx);
     }).then((onValue) {
       if (onValue) {
         _currentCycleIdx = currentCycleIdx;
       }
     });
+    notifyListeners();
   }
 
   var _currentActivity = 0;
