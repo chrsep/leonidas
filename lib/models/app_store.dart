@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/history.dart';
 import 'package:leonidas/models/routine.dart';
-import 'package:tuple/tuple.dart';
 
 import 'exercise.dart';
 import 'exercise_set.dart';
@@ -38,6 +37,8 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get isExercising => _exerciseStarted;
+
   set isExercising(bool value) {
     _exerciseStarted = value;
     if (value) {
@@ -48,23 +49,16 @@ class AppStore extends ChangeNotifier {
     }
   }
 
-  bool get isExercising {
-    return _exerciseStarted;
-  }
+  int get currentActivity => _currentActivity;
 
   set currentActivity(int value) {
     _currentActivity = value;
     notifyListeners();
   }
 
-  int get currentActivity {
-    return _currentActivity;
-  }
-
   int get nextDayIdx {
     int modifier = 1;
-    if (currentSessionIdx + modifier >=
-        currentRoutine.sessions.length) {
+    if (currentSessionIdx + modifier >= currentRoutine.sessions.length) {
       modifier = 0 - currentSessionIdx;
     }
     return currentSessionIdx + modifier;
@@ -89,23 +83,6 @@ class AppStore extends ChangeNotifier {
       }
     }
     return activities;
-  }
-
-  void startExercise() {
-    currentActivity = 0;
-  }
-
-  void finishWorkout() {
-    isLoggingResult = true;
-    isExercising = false;
-  }
-
-  void finishLogging() {
-    isLoggingResult = false;
-  }
-
-  void cancelExercise() {
-    isExercising = false;
   }
 
   Routine get currentRoutine => routines[selectedRoutineIdx];

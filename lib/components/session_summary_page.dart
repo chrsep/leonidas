@@ -6,16 +6,15 @@ import 'package:leonidas/models/app_store.dart';
 import 'package:leonidas/models/countdown_timer.dart';
 import 'package:provider/provider.dart';
 
-class SessionSummary extends StatelessWidget {
-  const SessionSummary({Key key, this.store}) : super(key: key);
-  final AppStore store;
-
+class SessionSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<AppStore>(context);
+
     final Duration totalTime =
         store.exerciseStopTime.difference(store.exerciseStartTime);
-    final session =
-        store.routines[store.selectedRoutineIdx].sessions[store.currentSessionIdx];
+    final session = store
+        .routines[store.selectedRoutineIdx].sessions[store.currentSessionIdx];
     final cycle = store.routines[store.selectedRoutineIdx].progression
         .cycles[store.currentCycleIdx];
 
@@ -83,7 +82,7 @@ class SessionSummary extends StatelessWidget {
           store.isLoggingResult = false;
           Navigator.of(context).pop();
         },
-        label: Text('LOG RESULT'),
+        label: Text('CLOSE'),
       ),
       bottomNavigationBar: BottomAppBar(
         color: LeonidasTheme.whiteTint[1],
@@ -139,5 +138,25 @@ class SessionSummary extends StatelessWidget {
       finalString += seconds.toString() + 's';
     }
     return finalString;
+  }
+
+  static Route createRoute() {
+    return PageRouteBuilder<SessionSummaryPage>(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          SessionSummaryPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = 0.0;
+        const end = 1.0;
+        final curve = Curves.ease;
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        final opacityAnimation = animation.drive(tween);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: child,
+        );
+      },
+    );
   }
 }

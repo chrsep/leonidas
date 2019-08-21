@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:leonidas/components/session_summary_page.dart';
 import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/app_store.dart';
 import 'package:leonidas/models/countdown_timer.dart';
@@ -20,7 +21,7 @@ class TrackerPage extends StatelessWidget {
     String buttonText;
     if (nextActivities.isEmpty) {
       infoText = 'FINISH';
-      buttonText = 'DONE';
+      buttonText = 'SEE SUMMARY';
       colorIdentifier = Colors.green;
     } else if (!store.isExercising) {
       infoText = 'STARTS IN...';
@@ -91,7 +92,8 @@ class TrackerPage extends StatelessWidget {
                     showDialog<AlertDialog>(
                       context: context,
                       builder: (context) {
-                        return _buildResetDialog(context, timer, store, nextActivities);
+                        return _buildResetDialog(
+                            context, timer, store, nextActivities);
                       },
                     );
                   },
@@ -154,8 +156,8 @@ class TrackerPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final activity = nextActivities[index];
                     final cardColor = store.isExercising && index == 0 ||
-                        // In case first item is actually a header
-                        nextActivities[0] is HeaderItem && index == 1
+                            // In case first item is actually a header
+                            nextActivities[0] is HeaderItem && index == 1
                         ? colorIdentifier
                         : null;
 
@@ -224,7 +226,9 @@ class TrackerPage extends StatelessWidget {
     if (activityTodos.isEmpty) {
       store.exerciseStopTime = DateTime.now();
       _resetTrackerStats(timer, store);
-      Navigator.of(context).pop();
+      Navigator.of(context)
+          .pushReplacement<SessionSummaryPage, SessionSummaryPage>(
+              SessionSummaryPage.createRoute());
       return;
     }
     // If exercise is not started (we're still on the starting countdown),
@@ -263,8 +267,8 @@ class TrackerPage extends StatelessWidget {
     store.isExercising = false;
   }
 
-  Widget _buildCancelDialog(BuildContext context, AppStore store,
-      CountdownTimer timer) {
+  Widget _buildCancelDialog(
+      BuildContext context, AppStore store, CountdownTimer timer) {
     return AlertDialog(
       content: Text('Cancel workout session?'),
       actions: <Widget>[
@@ -286,8 +290,7 @@ class TrackerPage extends StatelessWidget {
     );
   }
 
-  static Route createRoute
-      () {
+  static Route createRoute() {
     return PageRouteBuilder<TrackerPage>(
       pageBuilder: (context, animation, secondaryAnimation) => TrackerPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -295,7 +298,7 @@ class TrackerPage extends StatelessWidget {
         const end = 1.0;
         final curve = Curves.ease;
         final tween =
-        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         final opacityAnimation = animation.drive(tween);
 
         return FadeTransition(
