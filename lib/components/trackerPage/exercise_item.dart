@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/exercise_set.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:leonidas/models/weight_setup.dart';
 import 'package:leonidas/utils/weights.dart';
 
 import '../../leonidas_theme.dart';
@@ -15,14 +16,17 @@ abstract class ActivityListItem {
 }
 
 class ExerciseItem extends ActivityListItem {
-  ExerciseItem(this.exercise, this.set, this.routine) : super(exercise.name);
+  ExerciseItem(this.exercise, this.set, this.routine, this.weightSetup) : super(exercise.name);
 
   final Exercise exercise;
   final ExerciseSet set;
   final Routine routine;
+  final WeightSetup weightSetup;
 
   double get calculatedWeight {
-    return calculateWeight(exercise, routine, set);
+    final calculatedWeight = calculateWeight(exercise, routine, set);
+    final newWeight= weightSetup.calculatePossibleWeight(calculatedWeight);
+    return newWeight.calculateTotalWeight();
   }
 
   @override

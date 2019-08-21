@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:leonidas/models/stage.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/routine.dart';
+import 'package:leonidas/models/weight_setup.dart';
 import 'package:leonidas/utils/weights.dart';
 
 import '../leonidas_theme.dart';
 
 class ExerciseSetsTable extends StatelessWidget {
-  const ExerciseSetsTable({Key key, this.cycle, this.exercise, this.routine})
+  const ExerciseSetsTable({Key key, this.cycle, this.exercise, this.routine, this.weightSetup})
       : super(key: key);
 
   final Stage cycle;
   final Exercise exercise;
   final Routine routine;
+  final WeightSetup weightSetup;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +55,12 @@ class ExerciseSetsTable extends StatelessWidget {
                   rows: cycle.sets.map((set) {
                     // TM is training max
                     final calculatedWeight = calculateWeight(exercise, routine, set);
+                    final weightUsed = weightSetup.calculatePossibleWeight(calculatedWeight);
                     return DataRow(
                       cells: [
                         DataCell(Text(set.sets.toString())),
                         DataCell(Text(set.reps.toString())),
-                        DataCell(Text(calculatedWeight.toString() + 'kg')),
+                        DataCell(Text(weightUsed.calculateTotalWeight().toString() + 'kg')),
                         DataCell(Text(set.rest.toString() + 's')),
                       ],
                     );

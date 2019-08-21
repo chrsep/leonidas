@@ -18,6 +18,7 @@ class AppStore extends ChangeNotifier {
   final List<WeightSetup> weightSetups;
 
   // Progress of our current workout.
+  var _currentWeightSetupIdx = 0;
   var _currentSessionIdx = 0;
   var _currentCycleIdx = 2;
   var _currentActivity = 0;
@@ -109,7 +110,7 @@ class AppStore extends ChangeNotifier {
     for (var exercise in currentExercises) {
       activities.add(HeaderItem(exercise.name));
       for (var set in currentSets) {
-        activities.add(ExerciseItem(exercise, set, currentRoutine));
+        activities.add(ExerciseItem(exercise, set, currentRoutine, currentWeightSetup));
         activities.add(RestItem(set.rest, exercise.name));
       }
     }
@@ -121,6 +122,8 @@ class AppStore extends ChangeNotifier {
   Stage get currentCycle => currentRoutine.cycle.stages[currentCycleIdx];
 
   Session get currentSession => currentRoutine.sessions[currentSessionIdx];
+
+  WeightSetup get currentWeightSetup => weightSetups[_currentWeightSetupIdx];
 
   List<Exercise> get currentExercises =>
       currentRoutine.sessions[currentSessionIdx].exercises;

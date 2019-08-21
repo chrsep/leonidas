@@ -177,6 +177,7 @@ class _DiarySectionState extends State<DiarySection> {
                 cycle: selectedCycle,
                 exercise: exercise,
                 routine: selectedRoutine,
+                weightSetup: store.currentWeightSetup,
               );
             }),
           ],
