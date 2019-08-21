@@ -12,25 +12,9 @@ class TrackerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get app wide state and timer from provider
     final store = Provider.of<AppStore>(context);
-    final routine = store.routines[store.selectedRoutineIdx];
-
-    final List<ActivityListItem> activities = [];
-    final exerciseList = store.currentSessionExercises;
-    // Create list of activities to be done
-    for (int i = 0; i < exerciseList.length; i++) {
-      final exercise = exerciseList[i];
-      if (i > 1) {
-        final ExerciseItem lastExerciseItem =
-            activities.lastWhere((activity) => activity is ExerciseItem);
-        if (lastExerciseItem.exercise.name != exercise.item1.name) {
-          activities.add(HeaderItem(exercise.item1.name));
-        }
-      }
-      activities.add(ExerciseItem(exercise.item1, exercise.item2, routine));
-      activities.add(RestItem(exercise.item2.rest));
-    }
-
+    final List<ActivityListItem> activities = store.currentSessionActivities;
     final activitiesLeft = activities.sublist(store.currentActivity);
+
     if (activitiesLeft.isEmpty) {
       if (store.isExercising) {
         store.isExercising = false;
@@ -41,23 +25,8 @@ class TrackerPage extends StatelessWidget {
         return SessionSummary(store: store);
       });
     } else {
-      final currentExerciseName =
-          findCurrentExerciseName(activities, store.currentActivity)
-              .exercise
-              .name;
-      return SessionProgress(activitiesLeft, currentExerciseName);
+      return SessionProgress(activitiesLeft);
     }
-  }
-
-  ExerciseItem findCurrentExerciseName(
-    List<ActivityListItem> activities,
-    int currentActivityIdx,
-  ) {
-    return activities.isEmpty
-        ? null
-        : activities
-            .sublist(currentActivityIdx - 1 > 0 ? currentActivityIdx - 1 : 0)
-            .firstWhere((activity) => activity is ExerciseItem);
   }
 
   static Route createRoute() {

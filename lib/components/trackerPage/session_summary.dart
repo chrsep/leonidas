@@ -15,9 +15,9 @@ class SessionSummary extends StatelessWidget {
     final Duration totalTime =
         store.exerciseStopTime.difference(store.exerciseStartTime);
     final session =
-        store.routines[store.selectedRoutineIdx].sessions[store.currentSession];
+        store.routines[store.selectedRoutineIdx].sessions[store.currentSessionIdx];
     final cycle = store.routines[store.selectedRoutineIdx].progression
-        .cycles[store.currentCycle];
+        .cycles[store.currentCycleIdx];
 
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],
@@ -78,7 +78,7 @@ class SessionSummary extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          store.currentSession++;
+          store.currentSessionIdx++;
           store.currentActivity = 0;
           store.isLoggingResult = false;
           Navigator.of(context).pop();

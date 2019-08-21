@@ -6,10 +6,14 @@ import 'package:leonidas/utils/weights.dart';
 
 import '../../leonidas_theme.dart';
 
-abstract class ActivityListItem {}
+abstract class ActivityListItem {
+  ActivityListItem(this.name);
+  
+  final String name;
+}
 
 class ExerciseItem extends ActivityListItem {
-  ExerciseItem(this.exercise, this.set, this.routine);
+  ExerciseItem(this.exercise, this.set, this.routine) : super(exercise.name);
 
   final Exercise exercise;
   final ExerciseSet set;
@@ -50,9 +54,9 @@ class ExerciseItem extends ActivityListItem {
 }
 
 class RestItem extends ActivityListItem {
-  RestItem(this.duration);
+  RestItem(this.duration, this.exerciseName) : super(exerciseName);
 
-  final name = 'Rest';
+  final String exerciseName;
   final int duration;
 
   Widget buildWidget(Color cardColor) {
@@ -71,7 +75,7 @@ class RestItem extends ActivityListItem {
 }
 
 class HeaderItem extends ActivityListItem {
-  HeaderItem(this.value);
+  HeaderItem(this.value) : super(value);
 
   final String value;
 

@@ -9,10 +9,9 @@ import '../../leonidas_theme.dart';
 import 'exercise_item.dart';
 
 class SessionProgress extends StatelessWidget {
-  const SessionProgress(this.activityTodos, this.currentExerciseName);
+  const SessionProgress(this.activityTodos);
 
   final List<ActivityListItem> activityTodos;
-  final String currentExerciseName;
 
   @override
   Widget build(BuildContext context) {
@@ -44,56 +43,12 @@ class SessionProgress extends StatelessWidget {
       floatingActionButton: Consumer<CountdownTimer>(
         builder: (context, timer, child) {
           timer.countdownCallback = () {
-            timer.countUp();
-            Vibration.hasVibrator().then<void>((dynamic value) {
-              if (value) {
-                return Vibration.vibrate();
-              } else {
-                return null;
-              }
-            });
-            if (store.currentActivity == 0) {
-              store.isExercising = true;
-              return;
-            }
-            if (activityTodos[0] is HeaderItem) {
-              store.currentActivity = store.currentActivity + 2;
-            } else {
-              store.currentActivity++;
-            }
+            _continueToNextActivity(store, timer, activityTodos);
           };
           return FloatingActionButton.extended(
             backgroundColor: colorIdentifier,
             onPressed: () {
-              // If exercise is not started (we're still on the starting countdown),
-              // start it
-              if (!store.isExercising) {
-                store.isExercising = true;
-                timer.countUp();
-                return;
-              }
-
-              // Increment current activity twice to skip the header
-              // when topmost item is a header
-              if (activityTodos[0] is HeaderItem) {
-                store.currentActivity = store.currentActivity + 2;
-              } else {
-                store.currentActivity++;
-              }
-
-              // if there is no other activities, just stop.
-              if (activityTodos.length < 2) {
-                timer.stop();
-                return;
-              }
-
-              // Count up when next item is an exercise, countdown if its rest.
-              final nextActivity = activityTodos[1];
-              if (nextActivity is RestItem) {
-                timer.countdownFrom(nextActivity.duration);
-              } else {
-                timer.countUp();
-              }
+              _continueToNextActivity(store, timer, activityTodos);
             },
             label: Text(buttonText),
           );
@@ -180,7 +135,7 @@ class SessionProgress extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
-                  currentExerciseName.toUpperCase() ?? '',
+                  activityTodos[0].name.toUpperCase() ?? '',
                   style: LeonidasTheme.h4Heavy.apply(color: Colors.white),
                 ),
               ),
@@ -260,6 +215,38 @@ class SessionProgress extends StatelessWidget {
         )
       ],
     );
+  }
+}
+
+void _continueToNextActivity(AppStore store, CountdownTimer timer, List<ActivityListItem> activityTodos) {
+  // If exercise is not started (we're still on the starting countdown),
+  // start it
+  if (!store.isExercising) {
+    store.isExercising = true;
+    timer.countUp();
+    return;
+  }
+
+  // Increment current activity twice to skip the header
+  // when topmost item is a header
+  if (activityTodos[0] is HeaderItem) {
+    store.currentActivity = store.currentActivity + 2;
+  } else {
+    store.currentActivity++;
+  }
+
+  // if there is no other activities, just stop.
+  if (activityTodos.length < 2) {
+    timer.stop();
+    return;
+  }
+
+  // Count up when next item is an exercise, countdown if its rest.
+  final nextActivity = activityTodos[1];
+  if (nextActivity is RestItem) {
+    timer.countdownFrom(nextActivity.duration);
+  } else {
+    timer.countUp();
   }
 }
 

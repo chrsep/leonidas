@@ -1,17 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:vibration/vibration.dart';
 
 enum CountingDirection { up, down }
 
 class CountdownTimer extends ChangeNotifier {
   int _timeLeft = 0;
-  bool get isCounting {
-    return timer != null;
-  }
+
+  bool get isCounting => timer != null;
+
   Timer _timer;
   CountingDirection countingDirection = CountingDirection.down;
   Function countdownCallback;
+
+  Timer get timer => _timer;
 
   set timer(Timer newTimer) {
     if (_timer != null) {
@@ -22,18 +25,13 @@ class CountdownTimer extends ChangeNotifier {
     notifyListeners();
   }
 
-  Timer get timer {
-    return _timer;
-  }
+  int get timeLeft => _timeLeft;
 
   set timeLeft(int value) {
     _timeLeft = value;
     notifyListeners();
   }
 
-  int get timeLeft {
-    return _timeLeft;
-  }
 
   @override
   String toString() {
@@ -49,10 +47,7 @@ class CountdownTimer extends ChangeNotifier {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       timeLeft--;
       if (timeLeft == 0) {
-        timer.cancel();
-        if (countdownCallback != null) {
-          countdownCallback();
-        }
+        _countdownFinished(timer);
       }
     });
   }
@@ -85,8 +80,7 @@ class CountdownTimer extends ChangeNotifier {
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
         timeLeft--;
         if (timeLeft == 0) {
-          timer.cancel();
-          countdownCallback();
+          _countdownFinished(timer);
         }
       });
     } else {
@@ -94,6 +88,20 @@ class CountdownTimer extends ChangeNotifier {
         timeLeft++;
       });
     }
+  }
+
+  void _countdownFinished(Timer timer) {
+    timer.cancel();
+    if (countdownCallback != null) {
+      countdownCallback();
+    }
+    Vibration.hasVibrator().then<void>((dynamic value) {
+      if (value) {
+        return Vibration.vibrate();
+      } else {
+        return null;
+      }
+    });
   }
 }
 

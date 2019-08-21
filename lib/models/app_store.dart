@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/history.dart';
 import 'package:leonidas/models/routine.dart';
 import 'package:tuple/tuple.dart';
@@ -13,8 +14,8 @@ class AppStore extends ChangeNotifier {
   final List<Routine> routines;
 
   // Progress of our current workout.
-  var currentSession = 0;
-  var currentCycle = 2;
+  var currentSessionIdx = 0;
+  var currentCycleIdx = 2;
   var _currentActivity = 0;
   var selectedRoutineIdx = 0;
   var _exerciseStarted = false;
@@ -45,7 +46,6 @@ class AppStore extends ChangeNotifier {
     } else {
       exerciseStopTime = DateTime.now();
     }
-    notifyListeners();
   }
 
   bool get isExercising {
@@ -63,33 +63,32 @@ class AppStore extends ChangeNotifier {
 
   int get nextDayIdx {
     int modifier = 1;
-    if (currentSession + modifier >=
-        routines[selectedRoutineIdx].sessions.length) {
-      modifier = 0 - currentSession;
+    if (currentSessionIdx + modifier >=
+        currentRoutine.sessions.length) {
+      modifier = 0 - currentSessionIdx;
     }
-    return currentSession + modifier;
+    return currentSessionIdx + modifier;
   }
 
   int get nextCycleIdx {
-    int modifier = nextDayIdx == currentSession + 1 ? 0 : 1;
-    if (currentCycle + modifier >=
-        routines[selectedRoutineIdx].progression.cycles.length) {
-      modifier = 0 - currentCycle;
+    int modifier = nextDayIdx == currentSessionIdx + 1 ? 0 : 1;
+    if (currentCycleIdx + modifier >=
+        currentRoutine.progression.cycles.length) {
+      modifier = 0 - currentCycleIdx;
     }
-    return currentCycle + modifier;
+    return currentCycleIdx + modifier;
   }
 
-  List<Tuple2<Exercise, ExerciseSet>> get currentSessionExercises {
-    final routine = routines[selectedRoutineIdx];
-    final exercises = routine.sessions[currentSession].exercises;
-    final sets = routine.progression.cycles[currentCycle].sets;
-    final List<Tuple2<Exercise, ExerciseSet>> map = [];
-    for (var exercise in exercises) {
-      for (var set in sets) {
-        map.add(Tuple2(exercise, set));
+  List<ActivityListItem> get currentSessionActivities {
+    final List<ActivityListItem> activities = [];
+    for (var exercise in currentExercises) {
+      activities.add(HeaderItem(exercise.name));
+      for (var set in currentSets) {
+        activities.add(ExerciseItem(exercise, set, currentRoutine));
+        activities.add(RestItem(set.rest, exercise.name));
       }
     }
-    return map;
+    return activities;
   }
 
   void startExercise() {
@@ -108,4 +107,12 @@ class AppStore extends ChangeNotifier {
   void cancelExercise() {
     isExercising = false;
   }
+
+  Routine get currentRoutine => routines[selectedRoutineIdx];
+
+  List<Exercise> get currentExercises =>
+      currentRoutine.sessions[currentSessionIdx].exercises;
+
+  List<ExerciseSet> get currentSets =>
+      currentRoutine.progression.cycles[currentCycleIdx].sets;
 }
