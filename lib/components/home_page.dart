@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           return Consumer<CountdownTimer>(
             builder: (context, timer, child) {
               String fabText;
-              if (store.isExercising || timer.isCounting && timer.timeLeft < 9) {
+              if (timer.isCounting && timer.timeLeft < 9) {
                 fabText = timer.toString();
               } else if (store.isLoggingResult) {
                 fabText = 'LOG';
@@ -80,10 +80,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 // we need to wait until time left is under 9
                 label: Text(fabText),
                 onPressed: () {
-                  if (!store.isExercising && !timer.isCounting) {
+                  if (!timer.isCounting) {
                     timer.countdownFrom(10);
-                  }
-                  if (!store.isLoggingResult) {
+                    store.exerciseStartTime = DateTime.now();
                     store.currentActivity = 0;
                   }
                   Navigator.of(context)

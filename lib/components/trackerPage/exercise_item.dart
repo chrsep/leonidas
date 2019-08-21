@@ -8,8 +8,10 @@ import '../../leonidas_theme.dart';
 
 abstract class ActivityListItem {
   ActivityListItem(this.name);
-  
+
   final String name;
+
+  Widget buildWidget(Color colorIdentifier);
 }
 
 class ExerciseItem extends ActivityListItem {
@@ -23,11 +25,12 @@ class ExerciseItem extends ActivityListItem {
     return calculateWeight(exercise, routine, set);
   }
 
+  @override
   Widget buildWidget(
-    Color cardColor,
+    colorIdentifier,
   ) {
     return Card(
-      color: cardColor,
+      color: colorIdentifier,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Flex(
@@ -59,9 +62,10 @@ class RestItem extends ActivityListItem {
   final String exerciseName;
   final int duration;
 
-  Widget buildWidget(Color cardColor) {
+  @override
+  Widget buildWidget(colorIdentifier) {
     return Card(
-      color: cardColor ?? LeonidasTheme.whiteTint[1],
+      color: colorIdentifier ?? LeonidasTheme.whiteTint[1],
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Flex(
@@ -79,7 +83,8 @@ class HeaderItem extends ActivityListItem {
 
   final String value;
 
-  Widget buildWidget() {
+  @override
+  Widget buildWidget(colorIdentifier) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(

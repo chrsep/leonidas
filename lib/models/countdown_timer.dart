@@ -8,7 +8,15 @@ enum CountingDirection { up, down }
 class CountdownTimer extends ChangeNotifier {
   int _timeLeft = 0;
 
-  bool get isCounting => timer != null;
+  bool get isActive => timer != null;
+  bool _isCounting = false;
+
+  bool get isCounting => _isCounting;
+
+  set isCounting(bool isCounting) {
+    _isCounting = isCounting;
+    notifyListeners();
+  }
 
   Timer _timer;
   CountingDirection countingDirection = CountingDirection.down;
@@ -22,6 +30,7 @@ class CountdownTimer extends ChangeNotifier {
       _timer = null;
     }
     _timer = newTimer;
+    isCounting = true;
     notifyListeners();
   }
 
@@ -67,6 +76,7 @@ class CountdownTimer extends ChangeNotifier {
       timer = null;
     }
     timeLeft = 0;
+    isCounting = false;
     return timeOnCancelled;
   }
 
