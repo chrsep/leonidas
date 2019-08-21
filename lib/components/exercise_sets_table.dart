@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:leonidas/models/cycle.dart';
+import 'package:leonidas/models/stage.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/routine.dart';
 import 'package:leonidas/utils/weights.dart';
@@ -11,7 +11,7 @@ class ExerciseSetsTable extends StatelessWidget {
   const ExerciseSetsTable({Key key, this.cycle, this.exercise, this.routine})
       : super(key: key);
 
-  final Cycle cycle;
+  final Stage cycle;
   final Exercise exercise;
   final Routine routine;
 

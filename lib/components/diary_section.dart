@@ -26,8 +26,8 @@ class _DiarySectionState extends State<DiarySection> {
     final selectedRoutine = store.routines[store.currentRoutineIdx];
     final selectedDay = selectedRoutine
         .sessions[isShowingNext ? store.nextSessionIdx : store.currentSessionIdx];
-    final selectedCycle = selectedRoutine.progression
-        .cycles[isShowingNext ? store.nextCycleIdx : store.currentCycleIdx];
+    final selectedCycle = selectedRoutine.cycle
+        .stages[isShowingNext ? store.nextCycleIdx : store.currentCycleIdx];
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -128,7 +128,7 @@ class _DiarySectionState extends State<DiarySection> {
                     ),
                   ),
                   Row(
-                    children: selectedRoutine.progression.cycles.map((value) {
+                    children: selectedRoutine.cycle.stages.map((value) {
                       final isSelected = value.name == selectedCycle.name;
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),

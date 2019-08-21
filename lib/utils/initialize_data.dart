@@ -1,7 +1,7 @@
-import 'package:leonidas/models/cycle.dart';
+import 'package:leonidas/models/stage.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/exercise_set.dart';
-import 'package:leonidas/models/progression.dart';
+import 'package:leonidas/models/cycle.dart';
 import 'package:leonidas/models/routine.dart';
 import 'package:leonidas/models/session.dart';
 import 'package:leonidas/models/weight_setup.dart';
@@ -34,21 +34,21 @@ Routine generateSampleRoutine() {
 //  ];
 
   final cycles = [
-    Cycle('5/5/5', [
+    Stage('5/5/5', [
 //      ...warmUpCycle,
       ExerciseSet(1, 5, 65, 3, false, 120),
       ExerciseSet(1, 5, 75, 4, false, 120),
       ExerciseSet(1, 5, 85, 5, true, 120),
       ExerciseSet(5, 5, 65, 6, false, 120),
     ]),
-    Cycle('3/3/3', [
+    Stage('3/3/3', [
 //      ...warmUpCycle,
       ExerciseSet(1, 3, 65, 3, false, 120),
       ExerciseSet(1, 3, 75, 4, false, 120),
       ExerciseSet(1, 3, 85, 5, true, 120),
       ExerciseSet(5, 5, 65, 6, false, 120),
     ]),
-    Cycle('5/3/1', [
+    Stage('5/3/1', [
 //      ...warmUpCycle,
       ExerciseSet(1, 5, 75, 3, false, 120),
       ExerciseSet(1, 3, 85, 4, false, 120),
@@ -58,7 +58,7 @@ Routine generateSampleRoutine() {
   ];
 
 
-  final progression = Progression(cycles, exerciseProgression);
+  final progression = Cycle(cycles, exerciseProgression);
   return Routine(name, sessions, UnitOfMeasurement.metric, 90, progression);
 }
 

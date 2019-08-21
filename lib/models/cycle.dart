@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:leonidas/models/exercise.dart';
 
-import 'exercise_set.dart';
+import 'stage.dart';
 
 class Cycle extends ChangeNotifier {
-  Cycle(this.name, this.sets);
+  Cycle(this.stages, this.exerciseWeightProgression);
 
-  final String name;
-  final List<ExerciseSet> sets;
+  final List<Stage> stages;
+  // How many weight should be added to rep max when progressing
+  final Map<Exercise, double> exerciseWeightProgression;
 }

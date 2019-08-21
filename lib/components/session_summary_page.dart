@@ -10,8 +10,8 @@ class SessionSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<AppStore>(context);
-
-    final totalTime = store.exerciseStopTime.difference(store.exerciseStartTime);
+    final totalTime =
+        store.exerciseStopTime.difference(store.exerciseStartTime);
     final session = store.currentSession;
     final cycle = store.currentCycle;
 

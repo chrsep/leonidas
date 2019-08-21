@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+// This class tracks exercises that we do (deadlift, squat, etc...)
+// and our stat on in such as max rep.
 class Exercise extends ChangeNotifier {
   Exercise(this.name, this.description, this.maxRep);
 

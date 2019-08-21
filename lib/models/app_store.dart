@@ -6,7 +6,7 @@ import 'package:leonidas/models/session.dart';
 import 'package:leonidas/models/weight_setup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'cycle.dart';
+import 'stage.dart';
 import 'exercise.dart';
 import 'exercise_set.dart';
 
@@ -98,7 +98,7 @@ class AppStore extends ChangeNotifier {
   int get nextCycleIdx {
     int modifier = nextSessionIdx == currentSessionIdx + 1 ? 0 : 1;
     if (currentCycleIdx + modifier >=
-        currentRoutine.progression.cycles.length) {
+        currentRoutine.cycle.stages.length) {
       modifier = 0 - currentCycleIdx;
     }
     return currentCycleIdx + modifier;
@@ -118,7 +118,7 @@ class AppStore extends ChangeNotifier {
 
   Routine get currentRoutine => routines[currentRoutineIdx];
 
-  Cycle get currentCycle => currentRoutine.progression.cycles[currentCycleIdx];
+  Stage get currentCycle => currentRoutine.cycle.stages[currentCycleIdx];
 
   Session get currentSession => currentRoutine.sessions[currentSessionIdx];
 
@@ -126,7 +126,7 @@ class AppStore extends ChangeNotifier {
       currentRoutine.sessions[currentSessionIdx].exercises;
 
   List<ExerciseSet> get currentSets =>
-      currentRoutine.progression.cycles[currentCycleIdx].sets;
+      currentRoutine.cycle.stages[currentCycleIdx].sets;
 
   void moveToNextSession() {
     final nextSessionIdx = this.nextSessionIdx;
