@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           return Consumer<CountdownTimer>(
             builder: (context, timer, child) {
               String fabText;
-              if (timer.isCounting && timer.timeLeft < 9) {
+              if (timer.isCounting) {
                 fabText = timer.toString();
               } else {
                 fabText = 'START';

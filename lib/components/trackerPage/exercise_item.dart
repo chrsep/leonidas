@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:leonidas/models/exercise.dart';
 import 'package:leonidas/models/exercise_set.dart';
@@ -32,72 +33,92 @@ class ExerciseItem extends ActivityListItem {
     return setupUsed.calculateTotalWeight();
   }
 
-  List<Tuple2<int, int>> get getWeightUsed {
+  List<Tuple3<int, int, Color>> get getWeightUsed {
     final calculatedWeight = calculateWeight(exercise, routine, set);
     setupUsed ??= weightSetup.calculatePossibleWeight(calculatedWeight);
 
-    final List<int> weightValues = setupUsed.getWeightIntList();
-    final List<int> availableWeightPairs = setupUsed.getAvailableWeightList();
-    final List<Tuple2<int, int>> result = [];
-    for (var i = 0; i < weightValues.length; i++) {
-      result.add(Tuple2(weightValues[i], availableWeightPairs[i]));
+    final plateWeights = setupUsed.platePairsWeightValues;
+    final plateColors = setupUsed.plateColors;
+    final availablePlatePairs = setupUsed.getAvailablePlatePairs();
+    final List<Tuple3<int, int, Color>> result = [];
+    for (var i = 0; i < plateWeights.length; i++) {
+      result
+          .add(Tuple3(plateWeights[i], availablePlatePairs[i], plateColors[i]));
     }
     return result;
   }
 
   @override
-  Widget buildWidget(
-    colorIdentifier,
-  ) {
-    return Card(
-      color: colorIdentifier,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  calculatedWeight.toString() + ' Kg',
-                  style: LeonidasTheme.h5,
-                ),
-                Flex(
-                  direction: Axis.vertical,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+  Widget buildWidget(colorIdentifier, {bool showWeights}) {
+    return Column(
+      children: <Widget>[
+        Card(
+          color: colorIdentifier ?? LeonidasTheme.whiteTint[9],
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text(set.sets.toString() + ' Sets'),
-                    Text(set.reps.toString() + ' Reps'),
-                  ],
-                )
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 8, top: 8),
-              child: Row(
-                children: getWeightUsed.where((weights) {
-                  return weights.item2 > 0;
-                }).map((weights) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Chip(
-                      elevation: 1,
-                      backgroundColor: LeonidasTheme.whiteTint[1],
-                      label: Text((weights.item2 * 2).toString() +
-                          ' x ' +
-                          (weights.item1 / 2.0).toString() +
-                          'Kg'),
+                    Text(
+                      calculatedWeight.toString().replaceAll('.0', '') + ' KG',
+                      style: LeonidasTheme.h3,
                     ),
-                  );
-                }).toList(),
+                    Flex(
+                      direction: Axis.vertical,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(set.sets.toString() + ' Sets'),
+                        Text(set.reps.toString() + ' Reps'),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, bottom: 8, top: 16),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: getWeightUsed.where((weights) {
+                    return weights.item2 > 0;
+                  }).map((weights) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Chip(
+                        elevation: 1,
+                        backgroundColor: LeonidasTheme.whiteTint[1],
+                        avatar: Stack(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: weights.item3,
+                                  shape: BoxShape.circle),
+                            ),
+                            Center(
+                                child: Text(
+                              '2',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                            )),
+                          ],
+                        ),
+                        label: Text(
+                          (weights.item1 / 2.0)
+                                  .toString()
+                                  .replaceAll('.0', '') +
+                              ' KG',
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

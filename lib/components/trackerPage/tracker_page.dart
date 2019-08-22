@@ -168,10 +168,17 @@ class TrackerPage extends StatelessWidget {
                   final cardColor =
                       store.isExercising && index == 0 ? colorIdentifier : null;
 
+                  if (activity is ExerciseItem) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8),
+                      child: activity.buildWidget(cardColor, showWeights: index == 0),
+                    );
+                  }
                   return Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8),
                     child: activity.buildWidget(cardColor),
                   );
+
                 },
               ),
             )

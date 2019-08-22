@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class WeightSetup extends ChangeNotifier {
   WeightSetup(
@@ -42,19 +43,19 @@ class WeightSetup extends ChangeNotifier {
         half * 1.0;
   }
 
-  WeightSetup calculatePossibleWeight(double weight) {
-    final List<int> weightValues = getWeightIntList();
-    final List<int> availableWeightPairs = getAvailableWeightList();
-    final List<int> result = [0, 0, 0, 0, 0, 0, 0, 0, 0,0];
+  WeightSetup calculatePossibleWeight(double targetWeight) {
+    final List<int> plateWeights = platePairsWeightValues;
+    final List<int> availablePlatePairs = getAvailablePlatePairs();
+    final List<int> result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    var weightLeft = weight - barWeight;
-    for (var i = 0; i < availableWeightPairs.length; i++) {
-      final pairsNeeded = (weightLeft / weightValues[i]).floor();
+    var weightLeft = targetWeight - barWeight;
+    for (var i = 0; i < availablePlatePairs.length; i++) {
+      final pairsNeeded = (weightLeft / plateWeights[i]).floor();
       if (pairsNeeded != 0) {
-        result[i] = pairsNeeded > availableWeightPairs[i]
-            ? availableWeightPairs[i]
+        result[i] = pairsNeeded > availablePlatePairs[i]
+            ? availablePlatePairs[i]
             : pairsNeeded;
-        weightLeft -= result[i] * weightValues[i];
+        weightLeft -= result[i] * plateWeights[i];
       }
     }
     return WeightSetup(
@@ -68,27 +69,35 @@ class WeightSetup extends ChangeNotifier {
       result[7],
       result[8],
       result[9],
-      weight.toString() + 'Kg',
+      targetWeight.toString() + 'Kg',
       barWeight,
     );
   }
 
-  List<int> getAvailableWeightList() {
-    return [
-      twentyFive,
-      twenty,
-      fifteen,
-      ten,
-      five,
-      twoAndAHalf,
-      two,
-      oneAndAHalf,
-      one,
-      half
-    ];
-  }
+  List<int> getAvailablePlatePairs() => [
+        twentyFive,
+        twenty,
+        fifteen,
+        ten,
+        five,
+        twoAndAHalf,
+        two,
+        oneAndAHalf,
+        one,
+        half
+      ];
 
-  List<int> getWeightIntList() {
-    return [50, 40, 30, 20, 10, 5, 4, 3, 2, 1];
-  }
+  final platePairsWeightValues = [50, 40, 30, 20, 10, 5, 4, 3, 2, 1];
+  final plateColors = [
+    Colors.red,
+    Colors.blue,
+    Colors.yellow,
+    Colors.green,
+    Colors.white,
+    Colors.redAccent,
+    Colors.blueAccent,
+    Colors.yellowAccent,
+    Colors.greenAccent,
+    Colors.white,
+  ];
 }
