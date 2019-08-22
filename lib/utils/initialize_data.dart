@@ -33,7 +33,7 @@ Routine generateSampleRoutine() {
 //    ExerciseSet(1, 5, 60, 2, true, 60),
 //  ];
 
-  final cycles = [
+  final stages = [
     Stage('5/5/5', [
 //      ...warmUpCycle,
       ExerciseSet(1, 5, 65, 3, false, 120),
@@ -58,7 +58,7 @@ Routine generateSampleRoutine() {
   ];
 
 
-  final progression = Cycle(cycles, exerciseProgression);
+  final progression = Cycle(stages, exerciseProgression);
   return Routine(name, sessions, UnitOfMeasurement.metric, 90, progression);
 }
 

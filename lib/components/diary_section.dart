@@ -26,8 +26,8 @@ class _DiarySectionState extends State<DiarySection> {
     final selectedRoutine = store.routines[store.currentRoutineIdx];
     final selectedDay = selectedRoutine
         .sessions[isShowingNext ? store.nextSessionIdx : store.currentSessionIdx];
-    final selectedCycle = selectedRoutine.cycle
-        .stages[isShowingNext ? store.nextCycleIdx : store.currentCycleIdx];
+    final selectedStage = selectedRoutine.cycle
+        .stages[isShowingNext ? store.nextStageIdx : store.currentStageIdx];
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -129,7 +129,7 @@ class _DiarySectionState extends State<DiarySection> {
                   ),
                   Row(
                     children: selectedRoutine.cycle.stages.map((value) {
-                      final isSelected = value.name == selectedCycle.name;
+                      final isSelected = value.name == selectedStage.name;
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Chip(
@@ -174,7 +174,7 @@ class _DiarySectionState extends State<DiarySection> {
             ),
             ...selectedDay.exercises.map((exercise) {
               return ExerciseSetsTable(
-                cycle: selectedCycle,
+                stage: selectedStage,
                 exercise: exercise,
                 routine: selectedRoutine,
                 weightSetup: store.currentWeightSetup,

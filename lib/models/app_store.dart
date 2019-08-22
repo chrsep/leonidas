@@ -6,9 +6,9 @@ import 'package:leonidas/models/session.dart';
 import 'package:leonidas/models/weight_setup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'stage.dart';
 import 'exercise.dart';
 import 'exercise_set.dart';
+import 'stage.dart';
 
 class AppStore extends ChangeNotifier {
   AppStore(this.routines, this.weightSetups);
@@ -18,9 +18,9 @@ class AppStore extends ChangeNotifier {
   final List<WeightSetup> weightSetups;
 
   // Progress of our current workout.
-  var _currentWeightSetupIdx = 0;
+  final _currentWeightSetupIdx = 0;
   var _currentSessionIdx = 0;
-  var _currentCycleIdx = 2;
+  var _currentStageIdx = 2;
   var _currentActivity = 0;
   var currentRoutineIdx = 0;
   var selectedRoutineIdx = 0;
@@ -42,14 +42,14 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get currentCycleIdx => _currentCycleIdx;
+  int get currentStageIdx => _currentStageIdx;
 
-  set currentCycleIdx(int currentCycleIdx) {
+  set currentStageIdx(int currentStageIdx) {
     SharedPreferences.getInstance().then((prefs) {
-      return prefs.setInt('current_cycle_idx', currentCycleIdx);
+      return prefs.setInt('current_stage_idx', currentStageIdx);
     }).then((onValue) {
       if (onValue) {
-        _currentCycleIdx = currentCycleIdx;
+        _currentStageIdx = currentStageIdx;
       }
     });
     notifyListeners();
@@ -96,13 +96,12 @@ class AppStore extends ChangeNotifier {
     return currentSessionIdx + modifier;
   }
 
-  int get nextCycleIdx {
+  int get nextStageIdx {
     int modifier = nextSessionIdx == currentSessionIdx + 1 ? 0 : 1;
-    if (currentCycleIdx + modifier >=
-        currentRoutine.cycle.stages.length) {
-      modifier = 0 - currentCycleIdx;
+    if (currentStageIdx + modifier >= currentRoutine.cycle.stages.length) {
+      modifier = 0 - currentStageIdx;
     }
-    return currentCycleIdx + modifier;
+    return currentStageIdx + modifier;
   }
 
   List<ActivityListItem> get currentSessionActivities {
@@ -110,7 +109,8 @@ class AppStore extends ChangeNotifier {
     for (var exercise in currentExercises) {
       activities.add(HeaderItem(exercise.name));
       for (var set in currentSets) {
-        activities.add(ExerciseItem(exercise, set, currentRoutine, currentWeightSetup));
+        activities.add(
+            ExerciseItem(exercise, set, currentRoutine, currentWeightSetup));
         activities.add(RestItem(set.rest, exercise.name));
       }
     }
@@ -119,7 +119,7 @@ class AppStore extends ChangeNotifier {
 
   Routine get currentRoutine => routines[currentRoutineIdx];
 
-  Stage get currentCycle => currentRoutine.cycle.stages[currentCycleIdx];
+  Stage get currentStage => currentRoutine.cycle.stages[currentStageIdx];
 
   Session get currentSession => currentRoutine.sessions[currentSessionIdx];
 
@@ -129,13 +129,13 @@ class AppStore extends ChangeNotifier {
       currentRoutine.sessions[currentSessionIdx].exercises;
 
   List<ExerciseSet> get currentSets =>
-      currentRoutine.cycle.stages[currentCycleIdx].sets;
+      currentRoutine.cycle.stages[currentStageIdx].sets;
 
   void moveToNextSession() {
     final nextSessionIdx = this.nextSessionIdx;
-    final nextCycleIdx = this.nextCycleIdx;
+    final nextStageIdx = this.nextStageIdx;
     if (nextSessionIdx == 0) {
-      currentCycleIdx = nextCycleIdx;
+      currentStageIdx = nextStageIdx;
     }
     currentSessionIdx = nextSessionIdx;
   }

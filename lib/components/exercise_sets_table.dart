@@ -9,10 +9,10 @@ import 'package:leonidas/utils/weights.dart';
 import '../leonidas_theme.dart';
 
 class ExerciseSetsTable extends StatelessWidget {
-  const ExerciseSetsTable({Key key, this.cycle, this.exercise, this.routine, this.weightSetup})
+  const ExerciseSetsTable({Key key, this.stage, this.exercise, this.routine, this.weightSetup})
       : super(key: key);
 
-  final Stage cycle;
+  final Stage stage;
   final Exercise exercise;
   final Routine routine;
   final WeightSetup weightSetup;
@@ -52,7 +52,7 @@ class ExerciseSetsTable extends StatelessWidget {
                     DataColumn(label: Text('Weight')),
                     DataColumn(label: Text('Rest')),
                   ],
-                  rows: cycle.sets.map((set) {
+                  rows: stage.sets.map((set) {
                     // TM is training max
                     final calculatedWeight = calculateWeight(exercise, routine, set);
                     final weightUsed = weightSetup.calculatePossibleWeight(calculatedWeight);

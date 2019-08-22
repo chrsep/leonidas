@@ -43,10 +43,10 @@ class Leonidas extends StatelessWidget {
             final store = AppStore([sampleData], [sampleWeightSetup]);
             final prefs = SharedPreferences.getInstance();
             prefs.then((prefs) {
-              return prefs.getInt('current_cycle_idx');
-            }).then((currentCycleIdx) {
-              if(currentCycleIdx != null) {
-                store.currentCycleIdx = currentCycleIdx;
+              return prefs.getInt('current_stage_idx');
+            }).then((currentStageIdx) {
+              if(currentStageIdx != null) {
+                store.currentStageIdx = currentStageIdx;
               }
             });
             prefs.then((prefs) {

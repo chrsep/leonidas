@@ -13,7 +13,7 @@ class SessionSummaryPage extends StatelessWidget {
     final totalTime =
         store.exerciseStopTime.difference(store.exerciseStartTime);
     final session = store.currentSession;
-    final cycle = store.currentCycle;
+    final stage = store.currentStage;
 
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],
@@ -36,7 +36,7 @@ class SessionSummaryPage extends StatelessWidget {
               children: <Widget>[
                 Chip(
                   backgroundColor: LeonidasTheme.primaryColor,
-                  label: Text(cycle.name),
+                  label: Text(stage.name),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
