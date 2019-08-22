@@ -21,7 +21,7 @@ class AppStore extends ChangeNotifier {
   final _currentWeightSetupIdx = 0;
   var _currentSessionIdx = 0;
   var _currentStageIdx = 2;
-  var _currentActivity = 0;
+  var _currentActivityIdx = 0;
   var currentRoutineIdx = 0;
   var selectedRoutineIdx = 0;
   var _exerciseStarted = false;
@@ -81,10 +81,10 @@ class AppStore extends ChangeNotifier {
     }
   }
 
-  int get currentActivity => _currentActivity;
+  int get currentActivityIdx => _currentActivityIdx;
 
-  set currentActivity(int value) {
-    _currentActivity = value;
+  set currentActivityIdx(int value) {
+    _currentActivityIdx = value;
     notifyListeners();
   }
 

@@ -68,8 +68,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               String fabText;
               if (timer.isCounting && timer.timeLeft < 9) {
                 fabText = timer.toString();
-              } else if (store.isLoggingResult) {
-                fabText = 'LOG';
               } else {
                 fabText = 'START';
               }
@@ -78,28 +76,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 // we need to wait until time left is under 9
                 label: Text(fabText),
                 onPressed: () {
-                  final localNotif = FlutterLocalNotificationsPlugin();
-                  // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-                  final initSettings = InitializationSettings(
-                      AndroidInitializationSettings('ic_notification'), null);
-                  localNotif.initialize(initSettings);
-
-                  final notifChannel = AndroidNotificationDetails(
-                      'workout session',
-                      'workout sesion',
-                      'For showing that workout tracking is on',
-                      ongoing: true,
-                      autoCancel: false,
-                      ticker: 'Aspis is tracking workout');
-                  final platformChannelSpecifics =
-                      NotificationDetails(notifChannel, null);
-                  localNotif.show(0, 'Tracking Workout', 'Tap to launch aspis.',
-                      platformChannelSpecifics);
-
                   if (!timer.isCounting) {
+                    final localNotif = FlutterLocalNotificationsPlugin();
+                    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+                    final initSettings = InitializationSettings(
+                        AndroidInitializationSettings('ic_notification'), null);
+                    localNotif.initialize(initSettings);
+
+                    final notifChannel = AndroidNotificationDetails(
+                        'workout session',
+                        'workout sesion',
+                        'For showing that workout tracking is on',
+                        ongoing: true,
+                        autoCancel: false,
+                        ticker: 'Aspis is tracking workout');
+                    final platformChannelSpecifics =
+                        NotificationDetails(notifChannel, null);
+                    localNotif.show(0, 'Tracking Workout',
+                        'Tap to launch aspis.', platformChannelSpecifics);
+
                     timer.countdownFrom(10);
                     store.exerciseStartTime = DateTime.now();
-                    store.currentActivity = 0;
+                    store.currentActivityIdx = 0;
                   }
                   Navigator.of(context)
                       .push<TrackerPage>(TrackerPage.createRoute());

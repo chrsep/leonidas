@@ -15,7 +15,18 @@ class TrackerPage extends StatelessWidget {
     // Get app wide state and timer from provider
     final store = Provider.of<AppStore>(context);
     final List<ActivityListItem> activities = store.currentSessionActivities;
-    final nextActivities = activities.sublist(store.currentActivity);
+    List<ActivityListItem> nextActivities;
+    // if current topmost list item is a HeaderItem, we need to increment the currentActivityIdx
+    // by 2 to skip over the header item and display the next activity.
+    int nextActivityIndexDistance = 1;
+    if (store.currentActivityIdx < activities.length &&
+        activities[store.currentActivityIdx] is HeaderItem) {
+      // Do not display header item on the list on first index.
+      nextActivities = activities.sublist(store.currentActivityIdx + 1);
+      nextActivityIndexDistance = 2;
+    } else {
+      nextActivities = activities.sublist(store.currentActivityIdx);
+    }
 
     Color colorIdentifier;
     String infoText;
@@ -54,12 +65,12 @@ class TrackerPage extends StatelessWidget {
       floatingActionButton: Consumer<CountdownTimer>(
         builder: (context, timer, child) {
           timer.countdownCallback = () {
-            _continueToNextActivity(context, store, timer, nextActivities);
+            _continueToNextActivity(context, store, timer, nextActivities, nextActivityIndexDistance);
           };
           return FloatingActionButton.extended(
             backgroundColor: colorIdentifier,
             onPressed: () {
-              _continueToNextActivity(context, store, timer, nextActivities);
+              _continueToNextActivity(context, store, timer, nextActivities, nextActivityIndexDistance);
             },
             label: Text(buttonText),
           );
@@ -150,25 +161,18 @@ class TrackerPage extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ListView.builder(
-                  itemCount: nextActivities.length,
-                  itemBuilder: (context, index) {
-                    final activity = nextActivities[index];
-                    final cardColor = store.isExercising && index == 0 ||
-                            // In case first item is actually a header
-                            nextActivities[0] is HeaderItem && index == 1
-                        ? colorIdentifier
-                        : null;
+              child: ListView.builder(
+                itemCount: nextActivities.length,
+                itemBuilder: (context, index) {
+                  final activity = nextActivities[index];
+                  final cardColor =
+                      store.isExercising && index == 0 ? colorIdentifier : null;
 
-                    if (activity is HeaderItem && index == 0) {
-                      return Container();
-                    } else {
-                      return activity.buildWidget(cardColor);
-                    }
-                  },
-                ),
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    child: activity.buildWidget(cardColor),
+                  );
+                },
               ),
             )
           ],
@@ -194,9 +198,7 @@ class TrackerPage extends StatelessWidget {
         FlatButton(
           child: Text('Restart timer'),
           onPressed: () {
-            final currentActivity = (activityTodos[0] is HeaderItem)
-                ? activityTodos[1]
-                : activityTodos[0];
+            final currentActivity = activityTodos[0];
             if (!store.isExercising) {
               timer.timeLeft = 10;
             } else if (currentActivity is ExerciseItem) {
@@ -214,7 +216,7 @@ class TrackerPage extends StatelessWidget {
           onPressed: () {
             timer.countdownFrom(10);
             store.isExercising = false;
-            store.currentActivity = 0;
+            store.currentActivityIdx = 0;
             Navigator.of(context).pop();
           },
         )
@@ -222,9 +224,14 @@ class TrackerPage extends StatelessWidget {
     );
   }
 
-  void _continueToNextActivity(BuildContext context, AppStore store,
-      CountdownTimer timer, List<ActivityListItem> activityTodos) {
-    if (activityTodos.isEmpty) {
+  void _continueToNextActivity(
+    BuildContext context,
+    AppStore store,
+    CountdownTimer timer,
+    List<ActivityListItem> nextActivities,
+    int nextActivityIndexDistance,
+  ) {
+    if (nextActivities.isEmpty) {
       store.exerciseStopTime = DateTime.now();
       store.moveToNextSession();
       _resetTrackerStats(timer, store);
@@ -245,20 +252,16 @@ class TrackerPage extends StatelessWidget {
 
     // Increment current activity twice to skip the header
     // when topmost item is a header
-    if (activityTodos[0] is HeaderItem) {
-      store.currentActivity = store.currentActivity + 2;
-    } else {
-      store.currentActivity++;
-    }
+    store.currentActivityIdx += nextActivityIndexDistance;
 
     // if there is no other activities after current one, just stop.
-    if (activityTodos.length < 2) {
+    if (nextActivities.length < 2) {
       timer.stop();
       return;
     }
 
     // Count up when next item is an exercise, countdown if its rest.
-    final nextActivity = activityTodos[1];
+    final nextActivity = nextActivities[1];
     if (nextActivity is RestItem) {
       timer.countdownFrom(nextActivity.duration);
     } else {

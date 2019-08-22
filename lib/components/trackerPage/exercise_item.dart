@@ -54,7 +54,7 @@ class ExerciseItem extends ActivityListItem {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(top: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -73,11 +73,10 @@ class ExerciseItem extends ActivityListItem {
               ],
             ),
           ),
-          Divider(),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+              padding: const EdgeInsets.only(left: 16.0, bottom: 8, top: 8),
               child: Row(
                 children: getWeightUsed.where((weights) {
                   return weights.item2 > 0;
@@ -85,6 +84,8 @@ class ExerciseItem extends ActivityListItem {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Chip(
+                      elevation: 1,
+                      backgroundColor: LeonidasTheme.whiteTint[1],
                       label: Text((weights.item2 * 2).toString() +
                           ' x ' +
                           (weights.item1 / 2.0).toString() +
@@ -131,10 +132,10 @@ class HeaderItem extends ActivityListItem {
   @override
   Widget buildWidget(colorIdentifier) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(top: 16.0, bottom: 8),
       child: Center(
         child: Text(
-          value,
+          value.toUpperCase(),
           style: LeonidasTheme.h4,
         ),
       ),
