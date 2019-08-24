@@ -15,9 +15,10 @@ class LeonidasTheme {
     Color(0xFF373737),
   ];
 
-  static const Color primaryColor = Colors.blue;
-  static const Color secondaryColor = Colors.green;
+  static const Color blue = Colors.blue;
+  static const Color green = Colors.green;
   static const Color accentColor = Colors.red;
+  static const Color primaryColor = Color(0xFFd32f2f);
 
   static const TextStyle h1 =
       TextStyle(fontSize: 96, fontWeight: FontWeight.w300, letterSpacing: -1.5);

@@ -36,24 +36,24 @@ Routine generateSampleRoutine() {
   final stages = [
     Stage('5/5/5', [
 //      ...warmUpCycle,
-      ExerciseSet(1, 5, 65, 3, false, 120),
-      ExerciseSet(1, 5, 75, 4, false, 120),
-      ExerciseSet(1, 5, 85, 5, true, 120),
-      ExerciseSet(5, 5, 65, 6, false, 120),
+      ExerciseSet(1, 5, 65, 3, false, 120, 'normal'),
+      ExerciseSet(1, 5, 75, 4, false, 120, 'normal'),
+      ExerciseSet(1, 5, 85, 5, true, 120, 'amrap'),
+      ExerciseSet(5, 5, 65, 6, false, 120, 'fsl'),
     ]),
     Stage('3/3/3', [
 //      ...warmUpCycle,
-      ExerciseSet(1, 3, 65, 3, false, 120),
-      ExerciseSet(1, 3, 75, 4, false, 120),
-      ExerciseSet(1, 3, 85, 5, true, 120),
-      ExerciseSet(5, 5, 65, 6, false, 120),
+      ExerciseSet(1, 3, 65, 3, false, 120, 'normal'),
+      ExerciseSet(1, 3, 75, 4, false, 120, 'normal'),
+      ExerciseSet(1, 3, 85, 5, true, 120, 'amrap'),
+      ExerciseSet(5, 5, 65, 6, false, 120, 'fsl'),
     ]),
     Stage('5/3/1', [
 //      ...warmUpCycle,
-      ExerciseSet(1, 5, 75, 3, false, 120),
-      ExerciseSet(1, 3, 85, 4, false, 120),
-      ExerciseSet(1, 1, 95, 5, true, 120),
-      ExerciseSet(5, 5, 75, 6, false, 120),
+      ExerciseSet(1, 5, 75, 3, false, 120, 'normal'),
+      ExerciseSet(1, 3, 85, 4, false, 120, 'normal'),
+      ExerciseSet(1, 1, 95, 5, true, 120, 'amrap'),
+      ExerciseSet(5, 5, 75, 6, false, 120, 'fsl'),
     ])
   ];
 

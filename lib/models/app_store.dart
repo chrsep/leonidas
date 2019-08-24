@@ -109,9 +109,11 @@ class AppStore extends ChangeNotifier {
     for (var exercise in currentExercises) {
       activities.add(HeaderItem(exercise.name));
       for (var set in currentSets) {
-        activities.add(
-            ExerciseItem(exercise, set, currentRoutine, currentWeightSetup));
-        activities.add(RestItem(set.rest, exercise.name));
+        for (var i = 0; i < set.sets; i++) {
+          activities.add(
+              ExerciseItem(exercise, set, currentRoutine, currentWeightSetup));
+          activities.add(RestItem(set.rest, exercise.name));
+        }
       }
     }
     return activities;

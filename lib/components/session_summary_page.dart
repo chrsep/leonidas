@@ -35,13 +35,13 @@ class SessionSummaryPage extends StatelessWidget {
             Row(
               children: <Widget>[
                 Chip(
-                  backgroundColor: LeonidasTheme.primaryColor,
+                  backgroundColor: LeonidasTheme.blue,
                   label: Text(stage.name),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Chip(
-                    backgroundColor: LeonidasTheme.secondaryColor,
+                    backgroundColor: LeonidasTheme.green,
                     label: Text(session.name),
                   ),
                 )

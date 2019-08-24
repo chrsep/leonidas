@@ -8,8 +8,10 @@ class ExerciseSet extends ChangeNotifier {
     this.order,
     this.amrap,
     this.rest,
+    this.name,
   );
 
+  final String name;
   final int sets;
   final int reps;
   final int tmPercentage;

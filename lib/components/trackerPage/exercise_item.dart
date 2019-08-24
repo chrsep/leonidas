@@ -53,47 +53,66 @@ class ExerciseItem extends ActivityListItem {
     return Column(
       children: <Widget>[
         Card(
-          color: colorIdentifier ?? LeonidasTheme.whiteTint[9],
+          color: colorIdentifier == null? LeonidasTheme.whiteTint[4] : LeonidasTheme.primaryColor ,
+          clipBehavior: Clip.hardEdge,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      calculatedWeight.toString().replaceAll('.0', '') + ' KG',
-                      style: LeonidasTheme.h3,
+              Row(
+                children: <Widget>[
+                  Container(
+                    height: 88,
+                    width: 88,
+//                    color: LeonidasTheme.primaryColor,
+                    child: Center(
+                      child: Text(
+                        set.reps.toString() + 'X',
+                        style: LeonidasTheme.h4,
+                      ),
                     ),
-                    Flex(
-                      direction: Axis.vertical,
+                  ),
+                  Container(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(set.sets.toString() + ' Sets'),
-                        Text(set.reps.toString() + ' Reps'),
+                        Text(
+                          set.name.toUpperCase(),
+                          style: LeonidasTheme.overline
+                              .apply(color: Colors.white70),
+                        ),
+                        Text(
+                          calculatedWeight.toString().replaceAll('.0', '') +
+                              ' KG',
+                          style: LeonidasTheme.h5,
+                        ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
+              Divider(height: 0,),
               Padding(
-                padding: const EdgeInsets.only(left: 16.0, bottom: 8, top: 16),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
+                padding: const EdgeInsets.only(left: 24.0, top: 16),
+                child: Text('PLATES', style: LeonidasTheme.overline.apply(color: Colors.white70),),
+              ),
+              SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16),
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   children: getWeightUsed.where((weights) {
                     return weights.item2 > 0;
                   }).map((weights) {
                     return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding:
+                          const EdgeInsets.only(bottom: 8, right: 8.0),
                       child: Chip(
-                        elevation: 1,
-                        backgroundColor: LeonidasTheme.whiteTint[1],
+                        elevation: 0,
+                        backgroundColor: LeonidasTheme.whiteTint[9],
                         avatar: Stack(
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
-                                  color: weights.item3,
-                                  shape: BoxShape.circle),
+                                  color: weights.item3, shape: BoxShape.circle),
                             ),
                             Center(
                                 child: Text(

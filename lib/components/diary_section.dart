@@ -135,14 +135,14 @@ class _DiarySectionState extends State<DiarySection> {
                         child: Chip(
                           label: Text(value.name),
                           backgroundColor: isSelected
-                              ? LeonidasTheme.primaryColor
+                              ? LeonidasTheme.blue
                               : LeonidasTheme.whiteTint[0],
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(100)),
                               side: BorderSide(
                                   color: isSelected
-                                      ? LeonidasTheme.primaryColor
+                                      ? LeonidasTheme.blue
                                       : LeonidasTheme.whiteTint[1])),
                         ),
                       );
@@ -156,14 +156,14 @@ class _DiarySectionState extends State<DiarySection> {
                         child: Chip(
                           label: Text(value.name),
                           backgroundColor: isSelected
-                              ? LeonidasTheme.secondaryColor
+                              ? LeonidasTheme.green
                               : LeonidasTheme.whiteTint[0],
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(100)),
                               side: BorderSide(
                                   color: isSelected
-                                      ? LeonidasTheme.secondaryColor
+                                      ? LeonidasTheme.green
                                       : LeonidasTheme.whiteTint[1])),
                         ),
                       );

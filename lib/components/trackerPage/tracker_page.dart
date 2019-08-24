@@ -43,7 +43,7 @@ class TrackerPage extends StatelessWidget {
       buttonText = 'DID IT';
       infoText = 'GO';
     } else if (nextActivities[0] is RestItem) {
-      colorIdentifier = LeonidasTheme.primaryColor;
+      colorIdentifier = LeonidasTheme.blue;
       infoText = 'REST';
       buttonText = 'SKIP REST';
     } else {
@@ -65,12 +65,14 @@ class TrackerPage extends StatelessWidget {
       floatingActionButton: Consumer<CountdownTimer>(
         builder: (context, timer, child) {
           timer.countdownCallback = () {
-            _continueToNextActivity(context, store, timer, nextActivities, nextActivityIndexDistance);
+            _continueToNextActivity(context, store, timer, nextActivities,
+                nextActivityIndexDistance);
           };
           return FloatingActionButton.extended(
             backgroundColor: colorIdentifier,
             onPressed: () {
-              _continueToNextActivity(context, store, timer, nextActivities, nextActivityIndexDistance);
+              _continueToNextActivity(context, store, timer, nextActivities,
+                  nextActivityIndexDistance);
             },
             label: Text(buttonText),
           );
@@ -171,14 +173,14 @@ class TrackerPage extends StatelessWidget {
                   if (activity is ExerciseItem) {
                     return Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: activity.buildWidget(cardColor, showWeights: index == 0),
+                      child: activity.buildWidget(cardColor,
+                          showWeights: index == 0),
                     );
                   }
                   return Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8),
                     child: activity.buildWidget(cardColor),
                   );
-
                 },
               ),
             )

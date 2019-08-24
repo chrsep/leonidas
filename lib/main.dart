@@ -67,7 +67,7 @@ class Leonidas extends StatelessWidget {
         title: 'Leonidas',
         theme: ThemeData(
           brightness: Brightness.dark,
-          primaryColor: LeonidasTheme.primaryColor,
+          primaryColor: LeonidasTheme.blue,
           accentColor: LeonidasTheme.accentColor,
         ),
         home: HomePage(),
