@@ -33,6 +33,7 @@ class ExerciseItem extends ActivityListItem {
     return setupUsed.calculateTotalWeight();
   }
 
+  // Returns {the weights, number of pair needed, and plate's color}
   List<Tuple3<int, int, Color>> get getWeightUsed {
     final calculatedWeight = calculateWeight(exercise, routine, set);
     setupUsed ??= weightSetup.calculatePossibleWeight(calculatedWeight);
@@ -53,7 +54,9 @@ class ExerciseItem extends ActivityListItem {
     return Column(
       children: <Widget>[
         Card(
-          color: colorIdentifier == null? LeonidasTheme.whiteTint[4] : LeonidasTheme.primaryColor ,
+          color: colorIdentifier == null
+              ? LeonidasTheme.whiteTint[4]
+              : LeonidasTheme.primaryColor,
           clipBehavior: Clip.hardEdge,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,10 +93,15 @@ class ExerciseItem extends ActivityListItem {
                   )
                 ],
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 24.0, top: 16),
-                child: Text('PLATES', style: LeonidasTheme.overline.apply(color: Colors.white70),),
+                child: Text(
+                  'PLATES (PAIRS)',
+                  style: LeonidasTheme.overline.apply(color: Colors.white70),
+                ),
               ),
               SingleChildScrollView(
                 padding: EdgeInsets.only(left: 16),
@@ -103,8 +111,7 @@ class ExerciseItem extends ActivityListItem {
                     return weights.item2 > 0;
                   }).map((weights) {
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(bottom: 8, right: 8.0),
+                      padding: const EdgeInsets.only(bottom: 8, right: 8.0),
                       child: Chip(
                         elevation: 0,
                         backgroundColor: LeonidasTheme.whiteTint[9],
@@ -116,10 +123,11 @@ class ExerciseItem extends ActivityListItem {
                             ),
                             Center(
                                 child: Text(
-                              '2',
+                              weights.item2.toString(),
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.w500),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
                             )),
                           ],
                         ),
