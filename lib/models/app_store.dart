@@ -11,7 +11,7 @@ import 'exercise_set.dart';
 import 'stage.dart';
 
 class AppStore extends ChangeNotifier {
-  AppStore(this.routines, this.weightSetups);
+  AppStore(this.routines, this.weightSetups, this._currentStageIdx, this._currentSessionIdx);
 
   final List<History> histories = [];
   final List<Routine> routines;

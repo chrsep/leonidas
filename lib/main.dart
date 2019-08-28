@@ -34,44 +34,47 @@ class Leonidas extends StatelessWidget {
   final sampleData = generateSampleRoutine();
   final sampleWeightSetup = generateSampleWeightSetup();
 
+  Future<AppStore> createStore() async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentStageIdx = prefs.getInt('current_stage_idx') ?? 0;
+    final currentSessionIdx = prefs.getInt('current_session_idx') ?? 0;
+    return AppStore(
+        [sampleData], [sampleWeightSetup], currentStageIdx, currentSessionIdx);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          builder: (_) {
-            final store = AppStore([sampleData], [sampleWeightSetup]);
-            final prefs = SharedPreferences.getInstance();
-            prefs.then((prefs) {
-              return prefs.getInt('current_stage_idx');
-            }).then((currentStageIdx) {
-              if(currentStageIdx != null) {
-                store.currentStageIdx = currentStageIdx;
-              }
-            });
-            prefs.then((prefs) {
-              return prefs.getInt('current_session_idx');
-            }).then((currentSessionIdx) {
-              if(currentSessionIdx != null) {
-                store.currentSessionIdx = currentSessionIdx;
-              }
-            });
-            return store;
-          },
-        ),
-        ChangeNotifierProvider(
-          builder: (_) => CountdownTimer(),
-        )
-      ],
-      child: MaterialApp(
-        title: 'Leonidas',
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: LeonidasTheme.blue,
-          accentColor: LeonidasTheme.accentColor,
-        ),
-        home: HomePage(),
-      ),
+    return FutureBuilder(
+      future: createStore(),
+      builder: (context, AsyncSnapshot<AppStore> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return MaterialApp(
+            title: 'Leonidas',
+            home: Scaffold(),
+          );
+        }
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              builder: (_) {
+                return snapshot.data;
+              },
+            ),
+            ChangeNotifierProvider(
+              builder: (_) => CountdownTimer(),
+            )
+          ],
+          child: MaterialApp(
+            title: 'Leonidas',
+            theme: ThemeData(
+              brightness: Brightness.dark,
+              primaryColor: LeonidasTheme.blue,
+              accentColor: LeonidasTheme.accentColor,
+            ),
+            home: HomePage(),
+          ),
+        );
+      },
     );
   }
 }

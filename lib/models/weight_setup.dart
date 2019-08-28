@@ -18,6 +18,8 @@ class WeightSetup extends ChangeNotifier {
 
   final String name;
   final int barWeight;
+
+  // Pair of plates that we have
   final int twentyFive;
   final int twenty;
   final int fifteen;

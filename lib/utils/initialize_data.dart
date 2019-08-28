@@ -57,11 +57,10 @@ Routine generateSampleRoutine() {
     ])
   ];
 
-
   final progression = Cycle(stages, exerciseProgression);
   return Routine(name, sessions, UnitOfMeasurement.metric, 90, progression);
 }
 
 WeightSetup generateSampleWeightSetup() {
-  return WeightSetup(0, 0, 0, 2, 2, 2, 0, 0, 4, 1, 'Barbell', 9);
+  return WeightSetup(0, 0, 0, 2, 2, 2, 0, 0, 4, 0, 'Barbell', 9);
 }
