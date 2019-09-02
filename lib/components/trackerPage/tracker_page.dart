@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:leonidas/components/session_summary_page.dart';
 import 'package:leonidas/components/trackerPage/exercise_item.dart';
 import 'package:leonidas/models/app_store.dart';
@@ -285,8 +284,6 @@ class TrackerPage extends StatelessWidget {
   void _resetTrackerStats(CountdownTimer timer, AppStore store) {
     timer.stop();
     store.isExercising = false;
-    final localNotif = FlutterLocalNotificationsPlugin();
-    localNotif.cancelAll();
   }
 
   Widget _buildCancelDialog(

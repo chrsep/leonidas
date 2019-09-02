@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:leonidas/notification_helper.dart';
 import 'package:vibration/vibration.dart';
 
 enum CountingDirection { up, down }
 
 class CountdownTimer extends ChangeNotifier {
+  final notif = NotificationHelper();
   int _timeLeft = 0;
 
   bool get isActive => timer != null;
@@ -24,6 +26,8 @@ class CountdownTimer extends ChangeNotifier {
 
   Timer get timer => _timer;
 
+  Timer cancelNotifTimer;
+
   set timer(Timer newTimer) {
     if (_timer != null) {
       _timer.cancel();
@@ -38,9 +42,14 @@ class CountdownTimer extends ChangeNotifier {
 
   set timeLeft(int value) {
     _timeLeft = value;
+    if (cancelNotifTimer != null) {
+      cancelNotifTimer.cancel();
+      cancelNotifTimer = null;
+    }
+    notif.send(NotificationHelper.TRACKER, 0, 'Tracking workout',
+        secondIntFormat(value));
     notifyListeners();
   }
-
 
   @override
   String toString() {
@@ -77,6 +86,7 @@ class CountdownTimer extends ChangeNotifier {
     }
     timeLeft = 0;
     isCounting = false;
+    _cancelNotification();
     return timeOnCancelled;
   }
 
@@ -112,6 +122,13 @@ class CountdownTimer extends ChangeNotifier {
         return null;
       }
     });
+    _cancelNotification();
+  }
+
+  void _cancelNotification() {
+    cancelNotifTimer = Timer(Duration(seconds: 1), () {
+      notif.cancel(0);
+    });
   }
 }
 
@@ -119,8 +136,8 @@ String secondIntFormat(int inputSecond) {
   final minutes = (inputSecond / 60).floor();
   final seconds = inputSecond - 60 * minutes;
   final minutesString =
-  minutes > 9 ? minutes.toString() : '0' + minutes.toString();
+      minutes > 9 ? minutes.toString() : '0' + minutes.toString();
   final secondString =
-  seconds > 9 ? seconds.toString() : '0' + seconds.toString();
+      seconds > 9 ? seconds.toString() : '0' + seconds.toString();
   return minutesString + ':' + secondString;
 }
