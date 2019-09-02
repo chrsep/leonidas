@@ -152,35 +152,52 @@ class TrackerPage extends StatelessWidget {
           children: [
             // Only the tree below needs to be updated
             // when countdown changes.
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text(
-                infoText,
-                style: LeonidasTheme.subtitle1.apply(color: colorIdentifier),
+            Container(
+              decoration: BoxDecoration(
+                color: LeonidasTheme.whiteTint[0],
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 3, color: Colors.black, offset: Offset(0, 3))
+                ],
               ),
-            ),
-            Consumer<CountdownTimer>(
-              builder: (context, timer, child) {
-                return Center(
-                  child: AnimatedDefaultTextStyle(
-                    child: Text(timer.toString()),
-                    curve: Curves.bounceInOut,
-                    style: LeonidasTheme.h1.apply(
-                        color: timer.isActive ? Colors.white : Colors.white30),
-                    duration: Duration(milliseconds: 256),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      infoText,
+                      style:
+                          LeonidasTheme.subtitle1.apply(color: colorIdentifier),
+                    ),
                   ),
-                );
-              },
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Text(
-                  exerciseName,
-                  style: LeonidasTheme.h4Heavy.apply(color: Colors.white),
-                ),
+                  Consumer<CountdownTimer>(
+                    builder: (context, timer, child) {
+                      return Center(
+                        child: AnimatedDefaultTextStyle(
+                          child: Text(timer.toString()),
+                          curve: Curves.bounceInOut,
+                          style: LeonidasTheme.h1.apply(
+                              color: timer.isActive
+                                  ? Colors.white
+                                  : Colors.white30),
+                          duration: Duration(milliseconds: 256),
+                        ),
+                      );
+                    },
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        exerciseName,
+                        style: LeonidasTheme.h4Heavy.apply(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: nextActivities.length,
