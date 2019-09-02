@@ -37,10 +37,10 @@ class TrackerPage extends StatelessWidget {
       colorIdentifier = Colors.green;
     } else if (!store.isExercising) {
       infoText = 'STARTS IN...';
-      buttonText = 'START NOW';
+      buttonText = 'START';
     } else if (nextActivities[0] is ExerciseItem) {
       colorIdentifier = LeonidasTheme.accentColor;
-      buttonText = 'DID IT';
+      buttonText = 'DONE';
       infoText = 'GO';
     } else if (nextActivities[0] is RestItem) {
       colorIdentifier = LeonidasTheme.blue;
@@ -61,7 +61,7 @@ class TrackerPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Consumer<CountdownTimer>(
         builder: (context, timer, child) {
           timer.countdownCallback = () {
@@ -81,16 +81,22 @@ class TrackerPage extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         color: LeonidasTheme.whiteTint[4],
         child: Container(
-          height: 57,
+          height: 56,
           child: Consumer<CountdownTimer>(builder: (context, timer, _) {
             return Row(
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.close),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    showDialog<AlertDialog>(
+                      context: context,
+                      builder: (context) {
+                        return _buildCancelDialog(context, store, timer);
+                      },
+                    );
                   },
                 ),
+                Spacer(),
                 IconButton(
                   icon: Icon(timer.isActive ? Icons.pause : Icons.play_arrow),
                   onPressed: () {
@@ -102,26 +108,15 @@ class TrackerPage extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.settings_backup_restore),
+                  icon: Icon(Icons.snooze),
                   onPressed: () {
-                    showDialog<AlertDialog>(
-                      context: context,
-                      builder: (context) {
-                        return _buildResetDialog(
-                            context, timer, store, nextActivities);
-                      },
-                    );
+                    Navigator.of(context).pop();
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.more_vert),
                   onPressed: () {
-                    showDialog<AlertDialog>(
-                      context: context,
-                      builder: (context) {
-                        return _buildCancelDialog(context, store, timer);
-                      },
-                    );
+                    Navigator.of(context).pop();
                   },
                 ),
               ],
