@@ -9,10 +9,10 @@ import 'package:leonidas/models/weight_setup.dart';
 Routine generateSampleRoutine() {
   const name = 'Wendler 5/3/1';
 
-  final squat = Exercise('Squat', '', {1: 55});
-  final bench = Exercise('Bench', '', {1: 55});
-  final deadlift = Exercise('Deadlift', '', {1: 80});
-  final press = Exercise('press', '', {1: 35});
+  final squat = Exercise('Squat', '', {1: 60});
+  final bench = Exercise('Bench', '', {1: 57.5});
+  final deadlift = Exercise('Deadlift', '', {1: 85});
+  final press = Exercise('press', '', {1: 37.5});
 
   final sessions = [
     Session('Day 1', 0, [squat, bench]),

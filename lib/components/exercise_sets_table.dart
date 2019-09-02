@@ -28,12 +28,12 @@ class ExerciseSetsTable extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  exercise.name,
+                  exercise.name.toUpperCase(),
                   style: LeonidasTheme.h6.apply(color: Colors.white70),
                 ),
               ),
               Text(
-                exercise.oneRepMax.toString() + ' Kg Base',
+                exercise.oneRepMax.toString().replaceAll('.0', '') + ' Kg Base',
                 style:
                     LeonidasTheme.subtitle1Light.apply(color: Colors.white70),
               ),

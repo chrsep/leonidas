@@ -24,8 +24,8 @@ class _DiarySectionState extends State<DiarySection> {
   Widget build(BuildContext context) {
     final store = Provider.of<AppStore>(context);
     final selectedRoutine = store.routines[store.currentRoutineIdx];
-    final selectedDay = selectedRoutine
-        .sessions[isShowingNext ? store.nextSessionIdx : store.currentSessionIdx];
+    final selectedDay = selectedRoutine.sessions[
+        isShowingNext ? store.nextSessionIdx : store.currentSessionIdx];
     final selectedStage = selectedRoutine.cycle
         .stages[isShowingNext ? store.nextStageIdx : store.currentStageIdx];
     return SingleChildScrollView(
@@ -85,22 +85,20 @@ class _DiarySectionState extends State<DiarySection> {
                   Row(
                     children: <Widget>[
                       Text(
-                        'WORKOUT SESSIONS',
+                        'WORKOUT CYCLE',
                         style: LeonidasTheme.overline,
                       )
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 0),
                     child: Row(
                       children: <Widget>[
                         GestureDetector(
                           onTap: () => setState(() => {isShowingNext = false}),
                           child: AnimatedDefaultTextStyle(
                             duration: Duration(milliseconds: 200),
-                            child: Text(
-                              'Current',
-                            ),
+                            child: Text('Current'),
                             style: LeonidasTheme.h4.apply(
                               color: isShowingNext
                                   ? Colors.white30
@@ -134,16 +132,17 @@ class _DiarySectionState extends State<DiarySection> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Chip(
                           label: Text(value.name),
-                          backgroundColor: isSelected
-                              ? LeonidasTheme.blue
-                              : LeonidasTheme.whiteTint[0],
+                          backgroundColor: LeonidasTheme.whiteTint[0],
                           shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              side: BorderSide(
-                                  color: isSelected
-                                      ? LeonidasTheme.blue
-                                      : LeonidasTheme.whiteTint[1])),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                            side: BorderSide(
+                              color: isSelected
+                                  ? LeonidasTheme.blue
+                                  : LeonidasTheme.whiteTint[1],
+                            ),
+                          ),
                         ),
                       );
                     }).toList(),
@@ -155,16 +154,17 @@ class _DiarySectionState extends State<DiarySection> {
                         padding: const EdgeInsets.only(bottom: 8, right: 8.0),
                         child: Chip(
                           label: Text(value.name),
-                          backgroundColor: isSelected
-                              ? LeonidasTheme.green
-                              : LeonidasTheme.whiteTint[0],
+                          backgroundColor: LeonidasTheme.whiteTint[0],
                           shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              side: BorderSide(
-                                  color: isSelected
-                                      ? LeonidasTheme.green
-                                      : LeonidasTheme.whiteTint[1])),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                            side: BorderSide(
+                              color: isSelected
+                                  ? LeonidasTheme.green
+                                  : LeonidasTheme.whiteTint[1],
+                            ),
+                          ),
                         ),
                       );
                     }).toList(),
