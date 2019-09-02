@@ -1,7 +1,6 @@
 // This is the first widget our application renders
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:leonidas/components/coming_soon_placeholder.dart';
 import 'package:leonidas/components/diary_section.dart';
 import 'package:leonidas/components/trackerPage/tracker_page.dart';

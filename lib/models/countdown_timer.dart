@@ -46,7 +46,7 @@ class CountdownTimer extends ChangeNotifier {
       cancelNotifTimer.cancel();
       cancelNotifTimer = null;
     }
-    notif.send(NotificationHelper.TRACKER, 0, 'Tracking workout',
+    notif.send(NotificationHelper.tracker, 0, 'Tracking workout',
         secondIntFormat(value));
     notifyListeners();
   }

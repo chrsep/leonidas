@@ -9,7 +9,7 @@ class NotificationHelper {
   final initSettings = InitializationSettings(
       AndroidInitializationSettings('ic_notification'), null);
 
-  static final TRACKER = NotificationDetails(AndroidNotificationDetails(
+  static final tracker = NotificationDetails(AndroidNotificationDetails(
     'workout session',
     'workout sesion',
     'For showing that workout tracking is on',
