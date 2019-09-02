@@ -155,10 +155,6 @@ class TrackerPage extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: LeonidasTheme.whiteTint[0],
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 3, color: Colors.black, offset: Offset(0, 3))
-                ],
               ),
               child: Column(
                 children: <Widget>[
