@@ -81,6 +81,7 @@ class TrackerPage extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         color: LeonidasTheme.whiteTint[4],
         child: Container(
+          height: 57,
           child: Consumer<CountdownTimer>(builder: (context, timer, _) {
             return Row(
               children: <Widget>[
