@@ -31,13 +31,19 @@ class TrackerPage extends StatelessWidget {
     Color colorIdentifier;
     String infoText;
     String buttonText;
+    var enableSnooze = false;
+    var enableSkipPrevious =
+        store.currentActivityIdx > 0 && nextActivities.isNotEmpty;
+    var enablePlayPause = true;
     if (nextActivities.isEmpty) {
       infoText = 'FINISH';
-      buttonText = 'SEE SUMMARY';
+      buttonText = 'SUMMARY';
       colorIdentifier = Colors.green;
+      enablePlayPause = false;
     } else if (!store.isExercising) {
       infoText = 'STARTS IN...';
       buttonText = 'START';
+      enablePlayPause = false;
     } else if (nextActivities[0] is ExerciseItem) {
       colorIdentifier = LeonidasTheme.accentColor;
       buttonText = 'DONE';
@@ -46,10 +52,11 @@ class TrackerPage extends StatelessWidget {
       colorIdentifier = LeonidasTheme.blue;
       infoText = 'REST';
       buttonText = 'SKIP REST';
+      enableSnooze = true;
     } else {
       colorIdentifier = LeonidasTheme.accentColor;
       infoText = 'GO';
-      buttonText = 'DID IT';
+      buttonText = 'DONE';
     }
 
     var exerciseName = '';
@@ -98,26 +105,32 @@ class TrackerPage extends StatelessWidget {
                 ),
                 Spacer(),
                 IconButton(
+                  icon: Icon(Icons.skip_previous),
+                  onPressed: enableSkipPrevious
+                      ? () {
+                          Navigator.of(context).pop();
+                        }
+                      : null,
+                ),
+                IconButton(
                   icon: Icon(timer.isActive ? Icons.pause : Icons.play_arrow),
-                  onPressed: () {
-                    if (timer.isActive) {
-                      timer.pause();
-                    } else {
-                      timer.continueCounting();
-                    }
-                  },
+                  onPressed: enablePlayPause
+                      ? () {
+                          if (timer.isActive) {
+                            timer.pause();
+                          } else {
+                            timer.continueCounting();
+                          }
+                        }
+                      : null,
                 ),
                 IconButton(
                   icon: Icon(Icons.snooze),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: enableSnooze
+                      ? () {
+                          Navigator.of(context).pop();
+                        }
+                      : null,
                 ),
               ],
             );

@@ -18,61 +18,63 @@ class SessionSummaryPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: LeonidasTheme.whiteTint[0],
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: Text(
-                    DateFormat('EEEE\nd MMM y').format(store.exerciseStartTime),
-                    style: LeonidasTheme.h2,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Flexible(
+                    child: Text(
+                      DateFormat('EEEE\nd MMM y')
+                          .format(store.exerciseStartTime),
+                      style: LeonidasTheme.h2,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Chip(
+                    backgroundColor: LeonidasTheme.blue,
+                    label: Text(stage.name),
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Chip(
-                  backgroundColor: LeonidasTheme.blue,
-                  label: Text(stage.name),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Chip(
-                    backgroundColor: LeonidasTheme.green,
-                    label: Text(session.name),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Chip(
+                      backgroundColor: LeonidasTheme.green,
+                      label: Text(session.name),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0, top: 32),
+                    child: Text(
+                      'TOTAL TIME',
+                      style: LeonidasTheme.overline.apply(color: Colors.white),
+                    ),
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 4.0, top: 32),
-                  child: Text(
-                    'TOTAL TIME',
-                    style: LeonidasTheme.overline.apply(color: Colors.white),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Consumer<CountdownTimer>(
+                    builder: (context, timer, child) {
+                      return Text(
+                        formatDuration(totalTime),
+                        style: LeonidasTheme.h3.apply(color: Colors.white),
+                      );
+                    },
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Consumer<CountdownTimer>(
-                  builder: (context, timer, child) {
-                    return Text(
-                      formatDuration(totalTime),
-                      style: LeonidasTheme.h3.apply(color: Colors.white),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -82,38 +84,42 @@ class SessionSummaryPage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         color: LeonidasTheme.whiteTint[1],
-        child: Row(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.delete_outline),
-              onPressed: () {
-                showDialog<AlertDialog>(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Text('Discard current workout session result?'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        FlatButton(
-                          child: Text('Yes'),
-                          onPressed: () {
-                            store.isLoggingResult = false;
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    );
-                  },
-                );
-              },
-            )
-          ],
+        child: Container(
+          height: 56,
+          child: Row(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.delete_outline),
+                onPressed: () {
+                  showDialog<AlertDialog>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content:
+                            Text('Discard current workout session result?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              store.isLoggingResult = false;
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
