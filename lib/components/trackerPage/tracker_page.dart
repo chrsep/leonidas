@@ -27,21 +27,27 @@ class TrackerPage extends StatelessWidget {
     } else {
       nextActivities = activities.sublist(store.currentActivityIdx);
     }
+    int previousActivityDistance = -1;
+    if (store.currentActivityIdx != 0 &&
+        activities[store.currentActivityIdx + previousActivityDistance]
+            is HeaderItem) {
+      previousActivityDistance = -2;
+    }
 
+    final enableSkipPrevious =
+        store.currentActivityIdx > 0 && nextActivities.isNotEmpty;
+    var enableSnooze = false;
+    var enablePlayPause = true;
     Color colorIdentifier;
     String infoText;
     String buttonText;
-    var enableSnooze = false;
-    var enableSkipPrevious =
-        store.currentActivityIdx > 0 && nextActivities.isNotEmpty;
-    var enablePlayPause = true;
     if (nextActivities.isEmpty) {
       infoText = 'FINISH';
       buttonText = 'SUMMARY';
       colorIdentifier = Colors.green;
       enablePlayPause = false;
     } else if (!store.isExercising) {
-      infoText = 'STARTS IN...';
+      infoText = 'GET READY';
       buttonText = 'START';
       enablePlayPause = false;
     } else if (nextActivities[0] is ExerciseItem) {
@@ -72,13 +78,13 @@ class TrackerPage extends StatelessWidget {
       floatingActionButton: Consumer<CountdownTimer>(
         builder: (context, timer, child) {
           timer.countdownCallback = () {
-            _continueToNextActivity(context, store, timer, nextActivities,
+            _switchActivity(context, store, timer, nextActivities,
                 nextActivityIndexDistance);
           };
           return FloatingActionButton.extended(
             backgroundColor: colorIdentifier,
             onPressed: () {
-              _continueToNextActivity(context, store, timer, nextActivities,
+              _switchActivity(context, store, timer, nextActivities,
                   nextActivityIndexDistance);
             },
             label: Text(buttonText),
@@ -108,7 +114,12 @@ class TrackerPage extends StatelessWidget {
                   icon: Icon(Icons.skip_previous),
                   onPressed: enableSkipPrevious
                       ? () {
-                          Navigator.of(context).pop();
+                          showDialog<AlertDialog>(
+                              context: context,
+                              builder: (context) {
+                                return _buildGoBackDialog(context, store, timer,
+                                    nextActivities, previousActivityDistance);
+                              });
                         }
                       : null,
                 ),
@@ -128,7 +139,7 @@ class TrackerPage extends StatelessWidget {
                   icon: Icon(Icons.snooze),
                   onPressed: enableSnooze
                       ? () {
-                          Navigator.of(context).pop();
+                          timer.timeLeft += 5;
                         }
                       : null,
                 ),
@@ -199,34 +210,26 @@ class TrackerPage extends StatelessWidget {
     );
   }
 
-  Widget _buildResetDialog(BuildContext context, CountdownTimer timer,
-      AppStore store, List<ActivityListItem> activityTodos) {
+  Widget _buildGoBackDialog(
+      BuildContext context,
+      AppStore store,
+      CountdownTimer timer,
+      List<ActivityListItem> nextActivities,
+      int previousActivityDistance) {
     return AlertDialog(
-      title: Text('Do you want to restart?'),
-      content: Text('You can restart session to start from the very beginning '
-          'or only restart timer to start your current '
-          'activity from the  beginning.'),
+      title: Text('Do you want to go back to previous activity?'),
       actions: <Widget>[
         FlatButton(
-          child: Text('Cancel'),
+          child: Text('no'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-          child: Text('Restart timer'),
+          child: Text('Yes'),
           onPressed: () {
-            final currentActivity = activityTodos[0];
-            if (!store.isExercising) {
-              timer.timeLeft = 10;
-            } else if (currentActivity is ExerciseItem) {
-              timer.timeLeft = 0;
-            } else if (currentActivity is RestItem) {
-              timer.timeLeft = currentActivity.duration;
-            } else {
-              timer.timeLeft = 10;
-            }
-            Navigator.of(context).pop();
+            _switchActivity(context, store, timer, nextActivities,
+                previousActivityDistance);
           },
         ),
         FlatButton(
@@ -242,7 +245,7 @@ class TrackerPage extends StatelessWidget {
     );
   }
 
-  void _continueToNextActivity(
+  void _switchActivity(
     BuildContext context,
     AppStore store,
     CountdownTimer timer,

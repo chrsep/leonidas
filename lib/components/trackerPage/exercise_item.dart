@@ -69,7 +69,7 @@ class ExerciseItem extends ActivityListItem {
 //                    color: LeonidasTheme.primaryColor,
                     child: Center(
                       child: Text(
-                        set.reps.toString() + 'X',
+                        set.reps.toString() + (set.amrap ? '+' : 'X'),
                         style: LeonidasTheme.h4,
                       ),
                     ),
