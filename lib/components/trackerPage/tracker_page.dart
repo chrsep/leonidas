@@ -220,27 +220,19 @@ class TrackerPage extends StatelessWidget {
       title: Text('Do you want to go back to previous activity?'),
       actions: <Widget>[
         FlatButton(
-          child: Text('no'),
+          child: Text('NO'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-          child: Text('Yes'),
+          child: Text('YES'),
           onPressed: () {
             _switchActivity(context, store, timer, nextActivities,
                 previousActivityDistance);
-          },
-        ),
-        FlatButton(
-          child: Text('Restart session'),
-          onPressed: () {
-            timer.countdownFrom(10);
-            store.isExercising = false;
-            store.currentActivityIdx = 0;
             Navigator.of(context).pop();
           },
-        )
+        ),
       ],
     );
   }
