@@ -126,9 +126,9 @@ class CountdownTimer extends ChangeNotifier {
   }
 
   void _cancelNotification() {
-    cancelNotifTimer = Timer(Duration(seconds: 1), () {
-      notif.cancel(0);
-    });
+    notif.cancel(0);
+//    cancelNotifTimer = Timer(Duration(seconds: 1), () {
+//    });
   }
 }
 
