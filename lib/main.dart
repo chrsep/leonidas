@@ -31,15 +31,18 @@ Future<Null> main() async {
 
 // Our application root widget, call this on test to render the whole App
 class Leonidas extends StatelessWidget {
-  final sampleData = generateSampleRoutine();
-  final sampleWeightSetup = generateSampleWeightSetup();
-
   Future<AppStore> createStore() async {
+    final sampleData = generateSampleRoutine();
+    final sampleWeightSetup = generateSampleWeightSetup();
     final prefs = await SharedPreferences.getInstance();
     final currentStageIdx = prefs.getInt('current_stage_idx') ?? 0;
     final currentSessionIdx = prefs.getInt('current_session_idx') ?? 0;
     return AppStore(
-        [sampleData], [sampleWeightSetup], currentStageIdx, currentSessionIdx);
+      [sampleData],
+      [sampleWeightSetup],
+      currentStageIdx,
+      currentSessionIdx,
+    );
   }
 
   @override
