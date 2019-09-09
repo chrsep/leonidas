@@ -70,10 +70,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               } else {
                 fabText = 'TRACK';
               }
-              return FloatingActionButton.extended(
+              return FloatingActionButton(
                 // to prevent label from changing right away during transition
                 // we need to wait until time left is under 9
-                label: Text(fabText),
+                child: timer.isCounting ? Text(fabText) : Icon(Icons.timer),
+                isExtended: timer.isCounting,
                 onPressed: () {
                   if (!timer.isCounting) {
                     store.exerciseStartTime = DateTime.now();
@@ -90,6 +91,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Color(0xFF121212),
       bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
         clipBehavior: Clip.hardEdge,
         child: BottomNavigationBar(
           backgroundColor: LeonidasTheme.whiteTint[4],
